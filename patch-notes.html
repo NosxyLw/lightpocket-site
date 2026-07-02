@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes de version — LightPocket</title>
+<meta name="description" content="Tout ce qui change dans LightPocket, version par version. Nouveautés, améliorations et correctifs de la bêta.">
+<meta name="theme-color" content="#09090b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23e8963f'/%3E%3Cpath d='M13 4 6.5 13H11l-1 7L16.5 11H12l1-7z' fill='%23140d05'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090b; --bg2:#0d0d10; --panel:#101014; --panel2:#141419;
+  --hair:rgba(255,255,255,.065); --hair2:rgba(255,255,255,.12);
+  --ink:#ececee; --ink2:#a2a5ad; --ink3:#5f6269; --ink4:#3c3e44;
+  --cu:#e8963f; --cu2:#ffb35c; --cu-dim:rgba(232,150,63,.14);
+  --ok:#4ade80; --fix:#6aa8ff; --up:#c9a2ff;
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif; --disp:'Space Grotesk',sans-serif;
+  --serif:'Instrument Serif',serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--cu);color:#140d05}
+::-webkit-scrollbar{width:9px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#232329;border-radius:99px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 32px}
+body::after{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+:focus-visible{outline:2px solid var(--cu);outline-offset:3px;border-radius:4px}
+
+nav{position:fixed;inset:0 0 auto;z-index:100;backdrop-filter:blur(16px);background:rgba(9,9,11,.65);border-bottom:1px solid var(--hair)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:-.02em}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#ffb35c,#e8963f 55%,#b06f24);display:grid;place-items:center;box-shadow:0 0 0 1px rgba(255,255,255,.14) inset,0 4px 14px rgba(232,150,63,.35)}
+.logo-mark svg{width:14px;height:14px;display:block}
+.back{margin-left:auto;font-size:13.5px;color:var(--ink2);display:flex;align-items:center;gap:8px;transition:color .25s cubic-bezier(.32,.72,0,1)}
+.back:hover{color:var(--cu2)}
+
+header{padding:150px 0 60px;border-bottom:1px solid var(--hair);position:relative;overflow:hidden}
+header .halo{position:absolute;width:700px;height:380px;left:50%;top:-200px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(232,150,63,.14),transparent 65%);filter:blur(40px);pointer-events:none}
+.k{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.k::before{content:"";width:22px;height:1px;background:var(--cu)}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(36px,5vw,58px);letter-spacing:-.04em;line-height:1.02;margin:20px 0 16px;text-wrap:balance}
+h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cu)}
+.lead{color:var(--ink2);font-size:16px;line-height:1.7;max-width:520px}
+
+.timeline{padding:70px 0 110px}
+.release{display:grid;grid-template-columns:190px 1fr;gap:44px;padding:52px 0;border-bottom:1px solid var(--hair)}
+.release:last-child{border-bottom:0}
+.r-meta{position:sticky;top:100px;align-self:start}
+.r-ver{font-family:var(--mono);font-weight:600;font-size:24px;letter-spacing:-.03em}
+.r-ver i{font-style:normal;color:var(--cu)}
+.r-date{font-size:12px;color:var(--ink3);margin-top:6px;font-weight:500}
+.r-latest{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ok);
+  border:1px solid rgba(74,222,128,.3);background:rgba(74,222,128,.06);padding:4px 9px;border-radius:5px}
+.r-body h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.025em;margin-bottom:6px;text-wrap:balance}
+.r-body .r-sum{color:var(--ink2);font-size:14.5px;line-height:1.7;margin-bottom:26px;max-width:56ch}
+.r-group{margin-bottom:22px}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;padding:4px 9px;border-radius:5px;display:inline-block;margin-bottom:12px}
+.t-new{color:var(--ok);border:1px solid rgba(74,222,128,.3);background:rgba(74,222,128,.06)}
+.t-up{color:var(--up);border:1px solid rgba(201,162,255,.3);background:rgba(201,162,255,.06)}
+.t-fix{color:var(--fix);border:1px solid rgba(106,168,255,.3);background:rgba(106,168,255,.06)}
+.r-group ul{list-style:none}
+.r-group li{position:relative;padding:7px 0 7px 22px;color:var(--ink2);font-size:14px;line-height:1.6;max-width:60ch}
+.r-group li::before{content:"";position:absolute;left:4px;top:15px;width:5px;height:5px;border-radius:2px;background:var(--ink4)}
+.r-group li b{color:var(--ink);font-weight:600}
+.r-group li code{font-family:var(--mono);font-size:12px;color:var(--cu);background:var(--cu-dim);padding:1px 6px;border-radius:5px}
+
+.cta-band{border-top:1px solid var(--hair);padding:70px 0 90px;text-align:center;position:relative;overflow:hidden}
+.cta-band .halo{position:absolute;width:640px;height:340px;left:50%;bottom:-220px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(232,150,63,.15),transparent 65%);filter:blur(42px)}
+.cta-band h3{font-family:var(--disp);font-size:clamp(24px,3vw,34px);font-weight:600;letter-spacing:-.03em;margin-bottom:26px}
+.btn{position:relative;display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:14px;border-radius:99px;
+  padding:12px 12px 12px 24px;background:var(--cu);color:#140d05;transition:all .45s cubic-bezier(.32,.72,0,1);
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 8px 28px rgba(232,150,63,.22)}
+.btn:hover{background:var(--cu2);transform:translateY(-2px)}
+.btn:active{transform:scale(.98)}
+.btn .arr{width:28px;height:28px;border-radius:99px;background:rgba(0,0,0,.16);display:grid;place-items:center;transition:transform .45s cubic-bezier(.32,.72,0,1)}
+.btn:hover .arr{transform:translate(2px,-1px) scale(1.06)}
+.btn .arr svg{width:13px;height:13px}
+
+footer{border-top:1px solid var(--hair);padding:34px 0;font-size:12px;color:var(--ink4);background:var(--bg2)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--ink3);transition:color .2s}footer a:hover{color:var(--cu2)}
+
+@media(max-width:720px){
+  .release{grid-template-columns:1fr;gap:18px}
+  .r-meta{position:static;display:flex;align-items:center;gap:14px}
+  .r-latest{margin-top:0}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="./">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#140d05"/></svg></span>
+      LightPocket
+    </a>
+    <a class="back" href="./">← Retour au site</a>
+  </div>
+</nav>
+
+<header>
+  <div class="halo"></div>
+  <div class="wrap">
+    <span class="k">Notes de version</span>
+    <h1>Ce qui change,<br>version après <em>version.</em></h1>
+    <p class="lead">La bêta avance vite. Chaque mise à jour est poussée aux testeurs via Google Play — voici le journal complet, sans langue de bois.</p>
+  </div>
+</header>
+
+<div class="timeline">
+  <div class="wrap">
+
+    <article class="release">
+      <div class="r-meta">
+        <div class="r-ver">v1.0.<i>14</i></div>
+        <div class="r-date">2 juillet 2026</div>
+        <span class="r-latest">DERNIÈRE VERSION</span>
+      </div>
+      <div class="r-body">
+        <h2>La mise à jour Minecraft Java</h2>
+        <p class="r-sum">La plus grosse mise à jour de la bêta : un troisième jeu rejoint la galerie, avec une particularité rare — le choix complet de la version, chacune avec son runtime dédié.</p>
+        <div class="r-group"><span class="tag t-new">NOUVEAU</span>
+          <ul>
+            <li><b>Minecraft Java (bêta)</b> — serveur Paper en JVM native ARM, sans émulation. Le curseur RAM devient un vrai plafond mémoire.</li>
+            <li><b>Multi-versions</b> — <code>26.1.2</code>, <code>1.21.1</code>, <code>1.20.1</code>, <code>1.16.5</code> et <code>1.8.8</code> (PvP). Chaque version embarque son Java (8 → 25) et ses mondes isolés.</li>
+            <li><b>Plugins Modrinth</b> — recherche, tri, filtre de compatibilité par version, installation en deux taps, gestion des plugins installés.</li>
+            <li><b>Parrainage</b> — ton code personnel dans l'onglet Coins : +200 coins par ami parrainé, +150 pour lui.</li>
+          </ul>
+        </div>
+        <div class="r-group"><span class="tag t-up">AMÉLIORÉ</span>
+          <ul>
+            <li>Filtres du catalogue d'addons Bedrock : tri popularité / récent / téléchargements et filtre par version de jeu.</li>
+            <li>Réglages du monde complets — tous les paramètres accessibles après création, y compris l'onglet avancé.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="release">
+      <div class="r-meta">
+        <div class="r-ver">v1.0.<i>13</i></div>
+        <div class="r-date">29 juin 2026</div>
+      </div>
+      <div class="r-body">
+        <h2>Stabilité & confort</h2>
+        <p class="r-sum">Les trois plantages remontés par Android Vitals sont corrigés, et l'app gagne les réglages qu'on nous réclamait le plus.</p>
+        <div class="r-group"><span class="tag t-new">NOUVEAU</span>
+          <ul>
+            <li><b>Thème clair / sombre / système</b>, appliqué proprement au redémarrage.</li>
+            <li><b>Mini-tuto « premier serveur »</b> au premier lancement — trois étapes pour être en ligne.</li>
+            <li><b>Bandeau de mise à jour</b> quand une nouvelle version est disponible sur le Play Store.</li>
+            <li><b>Preset Économie RAM</b> — activé automatiquement sur les appareils modestes, débrayable.</li>
+          </ul>
+        </div>
+        <div class="r-group"><span class="tag t-fix">CORRIGÉ</span>
+          <ul>
+            <li>Crash au relancement de l'app après une longue inactivité (restauration d'écrans).</li>
+            <li>Crash du service serveur au redémarrage système (Android 12+).</li>
+            <li>Mode paysage correct sur tablettes.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="release">
+      <div class="r-meta">
+        <div class="r-ver">v1.0.<i>12</i></div>
+        <div class="r-date">29 juin 2026</div>
+      </div>
+      <div class="r-body">
+        <h2>Les addons débarquent</h2>
+        <p class="r-sum">Bedrock passe au niveau supérieur : le catalogue CurseForge s'ouvre directement dans l'app.</p>
+        <div class="r-group"><span class="tag t-new">NOUVEAU</span>
+          <ul>
+            <li><b>Addons CurseForge</b> pour Bedrock — addons, maps et packs de textures, avec avertissement de compatibilité.</li>
+            <li><b>Import local</b> — tes fichiers <code>.mcpack</code>, <code>.mcaddon</code> et <code>.mcworld</code> s'installent en deux taps.</li>
+            <li><b>Avatars de profil</b> — neuf personnages exclusifs à choisir, ou ta photo Google.</li>
+            <li>Suppression de mondes, mode hardcore, acceptation EULA à la création.</li>
+          </ul>
+        </div>
+        <div class="r-group"><span class="tag t-up">AMÉLIORÉ</span>
+          <ul>
+            <li>Icône d'app adaptive (fini les bordures crénelées) et notification serveur épurée : <code>2/4 joueurs · 1,4 Go</code>.</li>
+            <li>Choix de la version Bedrock à la création du monde, liste mise à jour automatiquement.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="release">
+      <div class="r-meta">
+        <div class="r-ver">v1.0.<i>11</i></div>
+        <div class="r-date">28 juin 2026</div>
+      </div>
+      <div class="r-body">
+        <h2>Le polish</h2>
+        <p class="r-sum">Une passe complète sur le ressenti : animations, progression de démarrage détaillée, onboarding.</p>
+        <div class="r-group"><span class="tag t-up">AMÉLIORÉ</span>
+          <ul>
+            <li><b>Progression de démarrage détaillée</b> — « Generating caves 48% », « Settling liquids 83% »… dans l'app et la notification.</li>
+            <li>Animations premium : entrées en cascade, cartes à ressort, transitions d'onboarding fluides.</li>
+            <li>L'onboarding ne s'affiche plus qu'une seule fois ; changement de langue avec voile de chargement.</li>
+            <li>Tous les logs techniques harmonisés en anglais (cohérents avec TShock et Minecraft).</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="release">
+      <div class="r-meta">
+        <div class="r-ver">v1.0.<i>9</i></div>
+        <div class="r-date">27 juin 2026</div>
+      </div>
+      <div class="r-body">
+        <h2>Ouverture de la bêta fermée</h2>
+        <p class="r-sum">Le point de départ : LightPocket arrive sur Google Play en test fermé.</p>
+        <div class="r-group"><span class="tag t-new">NOUVEAU</span>
+          <ul>
+            <li><b>Terraria</b> (TShock) et <b>Minecraft Bedrock</b> hébergeables depuis le téléphone.</li>
+            <li><b>Relais mondial</b> — chaque serveur reçoit son adresse publique dédiée.</li>
+            <li><b>Abonnement Pro</b> — hébergement illimité, 16 joueurs, essai gratuit de 3 jours.</li>
+            <li>Connexion Google, e-mail ou invité ; économie de coins avec quête quotidienne.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="halo"></div>
+  <div class="wrap">
+    <h3>Envie de tester la prochaine version avant tout le monde ?</h3>
+    <a class="btn" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
+      Rejoindre la bêta
+      <span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="#140d05" stroke-width="2.4"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LightPocket</span>
+    <span><a href="./">Accueil</a> · <a href="https://www.youtube.com/@LightPocket" target="_blank" rel="noopener">YouTube</a> · <a href="https://nosxylw.github.io/lightpocket-legal/privacy.html">Confidentialité</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
