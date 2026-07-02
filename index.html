@@ -3,254 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LightPocket — Tes serveurs de jeux, dans ta poche</title>
-<meta name="description" content="Héberge des serveurs Terraria et Minecraft (Bedrock & Java 1.8 → 26.x) directement depuis ton téléphone Android. Gratuit, sans PC, avec addons et plugins.">
-<meta property="og:title" content="LightPocket — Tes serveurs de jeux, dans ta poche">
-<meta property="og:description" content="Héberge Terraria & Minecraft depuis ton téléphone. Sans PC. Gratuit.">
+<title>LightPocket — Le serveur, c'est ton téléphone</title>
+<meta name="description" content="Héberge des serveurs Terraria et Minecraft (Bedrock & Java 1.8 → 26.x) depuis un téléphone Android. Vrais moteurs dédiés, adresse publique, addons et plugins.">
+<meta property="og:title" content="LightPocket — Le serveur, c'est ton téléphone">
+<meta property="og:description" content="Terraria & Minecraft hébergés depuis Android. Sans PC. Gratuit pour commencer.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0a0a0c">
+<meta name="theme-color" content="#09090b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ═══════════ LightPocket — design tokens (alignés sur l'app) ═══════════ */
+/* ════════════════════════════════════════════════════════════════
+   LIGHTPOCKET — v2 « studio »
+   Direction : monochrome charbon, un seul accent (cuivre), hairlines,
+   type éditorial (Grotesk + Instrument Serif italique), icônes stroke,
+   spotlight borders, scènes de jeux en couches. Aucun emoji, aucune
+   grille uniforme.
+   ════════════════════════════════════════════════════════════════ */
 :root{
-  --bg:#0a0a0c; --bg2:#111114; --surface:#16161a; --surface-hi:#1d1d22;
-  --line:rgba(255,255,255,.07); --line-hi:rgba(255,255,255,.14);
-  --accent:#e8963f; --accent-hi:#ffb35c; --accent-soft:rgba(232,150,63,.12);
-  --green:#3fcf76; --amber:#e3b341; --red:#ef5b5b;
-  --text:#f2f3f5; --sub:#9aa0aa; --faint:#5d636e;
-  --font:'Inter',system-ui,sans-serif; --display:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
-  --r:20px;
+  --bg:#09090b; --bg2:#0d0d10; --panel:#101014; --panel2:#141419;
+  --hair:rgba(255,255,255,.065); --hair2:rgba(255,255,255,.12);
+  --ink:#ececee; --ink2:#a2a5ad; --ink3:#5f6269; --ink4:#3c3e44;
+  --cu:#e8963f; --cu2:#ffb35c; --cu-dim:rgba(232,150,63,.14);
+  --ok:#4ade80;
+  --sans:'Inter',system-ui,sans-serif; --disp:'Space Grotesk',sans-serif;
+  --serif:'Instrument Serif',serif; --mono:'JetBrains Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:var(--accent);color:#16100a}
-::-webkit-scrollbar{width:10px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:#2a2a30;border-radius:99px;border:2px solid var(--bg)}
-::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:450;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:15px}
+::selection{background:var(--cu);color:#140d05}
+::-webkit-scrollbar{width:9px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#232329;border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--cu)}
 a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+button{font-family:inherit;cursor:pointer;border:0;background:0;color:inherit}
+svg{display:block}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+body::after{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-/* grain + glows d'ambiance */
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.35;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .04 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
-.glow{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none}
+/* ─── type utilitaires ─── */
+.k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.k::before{content:"";width:22px;height:1px;background:var(--cu)}
+.serif-i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+h2{font-family:var(--disp);font-weight:600;letter-spacing:-.035em;line-height:1.02;font-size:clamp(34px,4.4vw,56px);margin:20px 0 0}
+.sub{color:var(--ink2);font-size:16px;line-height:1.7;max-width:540px;margin-top:18px}
+.reveal{opacity:0;transform:translateY(26px);filter:blur(5px);transition:opacity .9s cubic-bezier(.16,.8,.3,1),transform .9s cubic-bezier(.16,.8,.3,1),filter .9s}
+.reveal.in{opacity:1;transform:none;filter:none}
 
-/* ═══════════ Nav ═══════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  background:rgba(10,10,12,.72);border-bottom:1px solid var(--line);transition:.3s}
-.nav-inner{max-width:1180px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;gap:34px}
-.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em}
-.bolt{width:34px;height:34px;border-radius:10px;background:radial-gradient(circle at 30% 25%,var(--accent-hi),var(--accent) 60%,#c97a2a);
-  display:grid;place-items:center;box-shadow:0 0 22px rgba(232,150,63,.45)}
-.bolt svg{width:17px;height:17px}
-.nav-links{display:flex;gap:26px;font-size:14px;color:var(--sub);font-weight:500}
-.nav-links a{transition:.2s}.nav-links a:hover{color:var(--text)}
-.nav-cta{margin-left:auto;display:flex;align-items:center;gap:14px}
-.lang-btn{font-size:12.5px;font-weight:700;color:var(--sub);border:1px solid var(--line-hi);border-radius:9px;padding:7px 12px;transition:.2s}
-.lang-btn:hover{color:var(--text);border-color:var(--accent)}
-.btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px;border-radius:13px;padding:12px 22px;transition:.25s cubic-bezier(.2,.9,.3,1.4)}
-.btn-accent{background:linear-gradient(135deg,var(--accent-hi),var(--accent));color:#16100a;box-shadow:0 4px 24px rgba(232,150,63,.35)}
-.btn-accent:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 8px 34px rgba(232,150,63,.5)}
-.btn-ghost{border:1px solid var(--line-hi);color:var(--text)}
-.btn-ghost:hover{border-color:var(--accent);background:var(--accent-soft)}
+/* ─── boutons ─── */
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:14px;
+  border-radius:11px;padding:13px 22px;transition:transform .3s cubic-bezier(.2,.9,.3,1.4),box-shadow .3s,background .3s;will-change:transform}
+.btn-cu{background:var(--cu);color:#140d05;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 8px 28px rgba(232,150,63,.22)}
+.btn-cu:hover{background:var(--cu2);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 12px 38px rgba(232,150,63,.35)}
+.btn-line{border:1px solid var(--hair2);color:var(--ink)}
+.btn-line:hover{border-color:var(--cu);background:var(--cu-dim)}
+.btn .ic{width:15px;height:15px}
 
-/* ═══════════ Hero ═══════════ */
-header{position:relative;padding:158px 0 90px;overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
-.pill{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--accent);
-  background:var(--accent-soft);border:1px solid rgba(232,150,63,.3);border-radius:99px;padding:7px 15px;letter-spacing:.4px}
-.pill .dot{width:7px;height:7px;border-radius:99px;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.4}}
-h1{font-family:var(--display);font-size:clamp(38px,5.2vw,62px);line-height:1.04;letter-spacing:-.035em;font-weight:700;margin:22px 0 20px}
-h1 .grad{background:linear-gradient(100deg,var(--accent-hi) 10%,var(--accent) 55%,#ff8e3c);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero-sub{font-size:17.5px;color:var(--sub);line-height:1.65;max-width:520px}
-.hero-ctas{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
-.hero-stats{display:flex;gap:38px;margin-top:44px}
-.hstat b{font-family:var(--display);font-size:26px;letter-spacing:-.02em;display:block}
-.hstat span{font-size:12.5px;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+/* ════════ NAV ════════ */
+nav{position:fixed;inset:0 0 auto;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(9,9,11,.65);border-bottom:1px solid var(--hair)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;gap:36px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:-.02em}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,#ffb35c,#e8963f 55%,#b06f24);display:grid;place-items:center;box-shadow:0 0 0 1px rgba(255,255,255,.14) inset,0 4px 14px rgba(232,150,63,.35)}
+.logo-mark svg{width:14px;height:14px}
+.logo .beta{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--cu);border:1px solid rgba(232,150,63,.4);border-radius:5px;padding:2.5px 6px;margin-left:2px}
+.nav-l{display:flex;gap:28px;font-size:13.5px;color:var(--ink2);font-weight:500}
+.nav-l a{transition:color .2s}.nav-l a:hover{color:var(--ink)}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:12px}
+.lang{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink3);padding:8px 10px;border-radius:8px;transition:.2s}
+.lang:hover{color:var(--ink)}
+.lang b{color:var(--ink)}
 
-/* Téléphone mockup + console live */
-.phone-zone{position:relative;display:flex;justify-content:center}
-.phone{position:relative;width:315px;height:640px;border-radius:44px;background:linear-gradient(160deg,#212127,#101013);
-  border:1px solid var(--line-hi);box-shadow:0 40px 90px rgba(0,0,0,.65),0 0 0 9px #0c0c0f,0 0 90px rgba(232,150,63,.14);
-  padding:14px;animation:float 7s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-14px)}}
-.screen{width:100%;height:100%;border-radius:33px;background:#0d0d10;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line)}
-.notch{align-self:center;width:96px;height:23px;background:#0c0c0f;border-radius:0 0 15px 15px}
-.app-head{padding:16px 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
-.app-head .bolt{width:26px;height:26px;border-radius:8px}
-.app-head .bolt svg{width:13px;height:13px}
-.app-title{font-size:13.5px;font-weight:700}
-.status-pill{margin-left:auto;display:flex;align-items:center;gap:6px;background:rgba(63,207,118,.12);border:1px solid rgba(63,207,118,.35);
-  border-radius:99px;padding:4px 10px;font-size:9.5px;font-weight:800;color:var(--green);letter-spacing:.6px}
-.status-pill .dot{width:5px;height:5px;border-radius:99px;background:var(--green);animation:pulse 1.6s infinite}
-.srv-row{display:flex;gap:8px;padding:12px 16px}
-.metric{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 11px}
-.metric b{font-family:var(--mono);font-size:13px;display:block}
-.metric span{font-size:8.5px;color:var(--faint);font-weight:700;text-transform:uppercase;letter-spacing:.8px}
-.console{flex:1;margin:2px 14px 12px;background:#0a0a0d;border:1px solid var(--line);border-radius:14px;padding:13px 14px;
-  font-family:var(--mono);font-size:10.3px;line-height:1.85;overflow:hidden;position:relative}
-.console::after{content:"";position:absolute;bottom:0;left:0;right:0;height:34px;background:linear-gradient(transparent,#0a0a0d)}
-.cl{white-space:nowrap;overflow:hidden}
-.cl .t{color:var(--faint)} .cl .ok{color:var(--green)} .cl .net{color:#5fa8ff} .cl .warn{color:var(--amber)} .cl .srv{color:#b8bdc7}
-.cursor{display:inline-block;width:7px;height:13px;background:var(--accent);vertical-align:-2px;animation:pulse 1s steps(2) infinite}
-.addr-bar{margin:0 14px 16px;background:var(--accent-soft);border:1px dashed rgba(232,150,63,.4);border-radius:12px;
-  padding:10px 13px;font-family:var(--mono);font-size:10.5px;color:var(--accent);display:flex;align-items:center;gap:8px}
-.toast{position:absolute;right:-38px;background:var(--surface);border:1px solid var(--line-hi);border-radius:14px;padding:11px 16px;
-  display:flex;align-items:center;gap:10px;box-shadow:0 14px 40px rgba(0,0,0,.5);opacity:0;transform:translateX(24px);transition:.6s cubic-bezier(.2,.9,.3,1.2);z-index:5}
-.toast.show{opacity:1;transform:none}
-.toast .avatar{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#3f7d4a,#7ec98f);display:grid;place-items:center;font-size:14px}
-.toast b{font-size:12.5px;display:block}.toast span{font-size:10.5px;color:var(--faint)}
-#toast1{top:24%}#toast2{top:56%;right:auto;left:-46px;transform:translateX(-24px)}
-#toast2 .avatar{background:linear-gradient(135deg,#5a8f3a,#a8d66e)}
-#toast2.show{transform:none}
+/* ════════ HERO ════════ */
+header{position:relative;padding:150px 0 40px;min-height:92vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-bg .grid{position:absolute;inset:0;
+  background-image:linear-gradient(var(--hair) 1px,transparent 1px),linear-gradient(90deg,var(--hair) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 20%,transparent 75%);opacity:.5}
+.hero-bg .halo{position:absolute;width:900px;height:520px;left:50%;top:-220px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(232,150,63,.16),transparent 65%);filter:blur(40px)}
+.hero{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center;position:relative}
+.h-badge{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--hair2);border-radius:99px;padding:7px 14px 7px 8px;
+  font-size:12.5px;color:var(--ink2);font-weight:500;background:rgba(255,255,255,.02)}
+.h-badge .led{width:16px;height:16px;border-radius:99px;background:var(--cu-dim);display:grid;place-items:center}
+.h-badge .led i{width:6px;height:6px;border-radius:99px;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:led 2.2s infinite}
+@keyframes led{50%{opacity:.35}}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(44px,5.8vw,76px);line-height:.99;letter-spacing:-.045em;margin:26px 0 24px}
+h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cu);letter-spacing:-.015em}
+.h-sub{font-size:16.5px;color:var(--ink2);line-height:1.75;max-width:480px}
+.h-sub b{color:var(--ink);font-weight:600}
+.h-ctas{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.h-proof{display:flex;align-items:center;gap:26px;margin-top:42px;padding-top:26px;border-top:1px solid var(--hair);flex-wrap:wrap}
+.proof{display:flex;flex-direction:column;gap:3px}
+.proof b{font-family:var(--disp);font-size:21px;font-weight:700;letter-spacing:-.02em}
+.proof b i{font-style:normal;color:var(--cu)}
+.proof span{font-size:11.5px;color:var(--ink3);font-weight:500}
+.proof-sep{width:1px;height:34px;background:var(--hair2)}
 
-/* marquee */
-.marquee{border-block:1px solid var(--line);padding:17px 0;overflow:hidden;background:rgba(255,255,255,.015)}
-.marquee-track{display:flex;gap:56px;width:max-content;animation:scroll 30s linear infinite;font-family:var(--display);font-weight:600;font-size:14.5px;color:var(--faint);letter-spacing:.5px}
-.marquee-track span{display:flex;align-items:center;gap:12px;white-space:nowrap}
-.marquee-track i{width:5px;height:5px;border-radius:99px;background:var(--accent);font-style:normal}
-@keyframes scroll{to{transform:translateX(-50%)}}
+/* — composition dashboard (droite) — */
+.stage{position:relative;height:560px;perspective:1200px}
+.card3{position:absolute;border-radius:18px;background:linear-gradient(175deg,var(--panel2),var(--panel));
+  border:1px solid var(--hair2);box-shadow:0 30px 70px rgba(0,0,0,.55);transition:transform .18s ease-out}
+.dash{width:400px;left:6px;top:36px;padding:0;overflow:hidden;z-index:2}
+.dash-head{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--hair)}
+.dash-head .logo-mark{width:24px;height:24px;border-radius:7px}.dash-head .logo-mark svg{width:11px;height:11px}
+.dash-head b{font-size:13px;font-weight:600}
+.dash-head .env{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ok);display:flex;align-items:center;gap:6px;
+  border:1px solid rgba(74,222,128,.25);background:rgba(74,222,128,.07);padding:4px 9px;border-radius:99px;letter-spacing:.08em}
+.dash-head .env i{width:5px;height:5px;border-radius:99px;background:var(--ok);animation:led 1.6s infinite}
+.dash-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--hair)}
+.dm{padding:13px 16px;border-right:1px solid var(--hair)}
+.dm:last-child{border-right:0}
+.dm b{font-family:var(--mono);font-size:14.5px;font-weight:600;display:block;letter-spacing:-.02em}
+.dm span{font-size:9.5px;color:var(--ink3);font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.term{padding:15px 18px 18px;font-family:var(--mono);font-size:11px;line-height:2.05;min-height:224px}
+.term .p{color:var(--ink4)} .term .g{color:var(--ok)} .term .b{color:#6aa8ff} .term .w{color:#e3b341} .term .n{color:#9aa0ab}
+.caret{display:inline-block;width:7px;height:12px;background:var(--cu);vertical-align:-2px;animation:led 1s steps(2) infinite}
+.dash-addr{display:flex;align-items:center;gap:9px;margin:0 18px 18px;border:1px dashed rgba(232,150,63,.45);
+  background:var(--cu-dim);border-radius:11px;padding:11px 14px;font-family:var(--mono);font-size:11px;color:var(--cu)}
+.dash-addr svg{width:13px;height:13px;flex-shrink:0}
+.players3{width:238px;right:0;top:0;padding:16px 18px;z-index:3}
+.players3 h4{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:13px;display:flex;justify-content:space-between}
+.players3 h4 b{color:var(--cu);font-family:var(--mono)}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--hair)}
+.pavat{width:26px;height:26px;border-radius:8px;flex-shrink:0}
+.prow b{font-size:12.5px;font-weight:600;display:block}
+.prow span{font-size:10px;color:var(--ink3)}
+.prow .ping{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ok)}
+.notif3{width:262px;right:22px;bottom:64px;padding:14px 16px;display:flex;gap:11px;align-items:center;z-index:4}
+.notif3 .logo-mark{width:30px;height:30px;flex-shrink:0}
+.notif3 b{font-size:12px;display:block}.notif3 span{font-size:10.5px;color:var(--ink3)}
+.chip3{position:absolute;left:34px;bottom:24px;z-index:4;font-family:var(--mono);font-size:10.5px;color:var(--ink2);
+  background:var(--panel);border:1px solid var(--hair2);border-radius:99px;padding:8px 14px;display:flex;gap:8px;align-items:center;box-shadow:0 16px 44px rgba(0,0,0,.5)}
+.chip3 svg{width:12px;height:12px;color:var(--cu)}
 
-/* ═══════════ Sections communes ═══════════ */
-section{position:relative;padding:110px 0}
-.eyebrow{font-size:12.5px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:2.4px}
-h2{font-family:var(--display);font-size:clamp(30px,3.8vw,46px);letter-spacing:-.03em;line-height:1.08;margin:14px 0 16px;font-weight:700}
-.sec-sub{color:var(--sub);font-size:16.5px;max-width:560px;line-height:1.65}
-.reveal{opacity:0;transform:translateY(34px);transition:.9s cubic-bezier(.16,.8,.3,1)}
-.reveal.in{opacity:1;transform:none}
+/* ════════ TICKER ════════ */
+.ticker{border-block:1px solid var(--hair);overflow:hidden;padding:0;background:var(--bg2)}
+.tick-in{display:flex;width:max-content;animation:tick 36s linear infinite}
+.tick-in span{display:flex;align-items:center;gap:0;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--ink3);
+  text-transform:uppercase;padding:15px 0}
+.tick-in span::after{content:"";width:1px;height:12px;background:var(--hair2);margin:0 34px}
+.tick-in span b{color:var(--ink2);font-weight:500}
+@keyframes tick{to{transform:translateX(-50%)}}
 
-/* ═══════════ Galerie de jeux ═══════════ */
-.games-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:54px}
-.gcard{position:relative;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);overflow:hidden;
-  transition:.45s cubic-bezier(.2,.9,.3,1.1);cursor:default;min-height:390px;display:flex;flex-direction:column}
-.gcard:hover{transform:translateY(-9px);border-color:var(--line-hi);box-shadow:0 30px 70px rgba(0,0,0,.5)}
-.gcard.big{grid-column:span 3}
-.gcard.small{grid-column:span 2;min-height:320px}
-.gart{height:200px;position:relative;overflow:hidden}
-.gcard.small .gart{height:150px}
-.gart::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,var(--surface))}
-.gcard:hover .gart>div{transform:scale(1.07)}
-.gart>div{position:absolute;inset:0;transition:1.1s cubic-bezier(.2,.9,.3,1)}
-/* Terraria : collines 2D + soleil pixel */
-.art-terraria{background:linear-gradient(180deg,#1d3a52 0%,#2a5b6e 45%,#3f7d4a 78%,#2c5a36 100%)}
-.art-terraria::before{content:"";position:absolute;width:44px;height:44px;background:#ffd76e;top:26px;right:52px;
-  box-shadow:0 0 40px 12px rgba(255,215,110,.5);clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)}
-.art-terraria::after{content:"";position:absolute;bottom:-18px;left:-10%;right:-10%;height:110px;
-  background:radial-gradient(60% 100% at 25% 100%,#234a2c 60%,transparent 61%),radial-gradient(55% 90% at 70% 100%,#2c5a36 60%,transparent 61%)}
-/* Bedrock : cubes iso */
-.art-bedrock{background:linear-gradient(160deg,#15321c,#1f4d2a 55%,#173a20);}
-.art-bedrock::before{content:"";position:absolute;inset:0;opacity:.5;
-  background-image:linear-gradient(30deg,rgba(255,255,255,.06) 12%,transparent 12.5%,transparent 87%,rgba(255,255,255,.06) 87.5%),
-  linear-gradient(150deg,rgba(0,0,0,.28) 12%,transparent 12.5%,transparent 87%,rgba(0,0,0,.28) 87.5%);
-  background-size:42px 74px}
-.art-bedrock::after{content:"";position:absolute;width:76px;height:76px;left:calc(50% - 38px);top:38px;
-  background:linear-gradient(135deg,#7ec98f 0 50%,#4c7a3a 50%);border:3px solid rgba(0,0,0,.35);transform:rotate(45deg);border-radius:10px;box-shadow:0 0 44px rgba(126,201,143,.35)}
-/* Java : bloc herbe + code */
-.art-java{background:linear-gradient(165deg,#20130c,#3a2413 55%,#241609)}
-.art-java::before{content:"{ } ;";position:absolute;font-family:var(--mono);font-weight:600;font-size:15px;color:rgba(232,150,63,.5);
-  top:22px;left:26px;text-shadow:0 0 18px rgba(232,150,63,.4);letter-spacing:6px}
-.art-java::after{content:"";position:absolute;width:84px;height:84px;right:44px;bottom:-16px;border-radius:14px;
-  background:linear-gradient(180deg,#6db457 0 32%,#7a5230 32%);border:3px solid rgba(0,0,0,.4);box-shadow:0 0 44px rgba(109,180,87,.3);transform:rotate(-8deg)}
-/* tModLoader */
-.art-tmod{background:linear-gradient(160deg,#241435,#3d2260 60%,#1c0f2b)}
-.art-tmod::before{content:"";position:absolute;width:92px;height:92px;left:calc(50% - 46px);top:26px;border-radius:50%;
-  border:11px dashed rgba(186,132,255,.55);animation:spin 16s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* Stardew */
-.art-stardew{background:linear-gradient(175deg,#5b3413 0%,#8a5a1e 40%,#3f6b2a 75%,#2c5220)}
-.art-stardew::before{content:"";position:absolute;width:56px;height:56px;border-radius:50%;background:#ffd76e;top:18px;left:34px;box-shadow:0 0 48px 16px rgba(255,215,110,.45)}
-.art-stardew::after{content:"";position:absolute;inset:auto -5% -8% -5%;height:64px;
-  background:repeating-linear-gradient(90deg,#35502a 0 22px,#2c4522 22px 44px);transform:skewX(-14deg)}
-.gbody{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
-.gtop{display:flex;align-items:center;gap:10px}
-.gname{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.02em}
-.gbadge{font-size:9.5px;font-weight:800;letter-spacing:.8px;border-radius:7px;padding:4px 9px}
-.b-live{color:var(--green);background:rgba(63,207,118,.12);border:1px solid rgba(63,207,118,.3)}
-.b-beta{color:#5fa8ff;background:rgba(95,168,255,.1);border:1px solid rgba(95,168,255,.3)}
-.b-soon{color:var(--faint);background:rgba(255,255,255,.05);border:1px solid var(--line-hi)}
-.gdesc{color:var(--sub);font-size:13.8px;line-height:1.6;margin-top:9px;flex:1}
-.gvers{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
-.vchip{font-family:var(--mono);font-size:10.6px;font-weight:600;color:var(--accent);background:var(--accent-soft);
-  border:1px solid rgba(232,150,63,.3);border-radius:7px;padding:4px 9px}
-.vchip.dim{color:var(--faint);background:transparent;border-color:var(--line-hi)}
+/* ════════ MANIFESTO ════════ */
+.manifesto{padding:130px 0 120px;text-align:center}
+.manifesto p{font-family:var(--disp);font-weight:500;font-size:clamp(24px,3.1vw,40px);line-height:1.32;letter-spacing:-.03em;
+  max-width:880px;margin:26px auto 0;color:var(--ink3)}
+.manifesto p b{color:var(--ink);font-weight:600}
+.manifesto p em{font-family:var(--serif);font-style:italic;color:var(--cu);font-weight:400}
+.manifesto .k{justify-content:center}.manifesto .k::before{display:none}
 
-/* ═══════════ Steps ═══════════ */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:54px;counter-reset:step}
-.step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:34px 28px;overflow:hidden;transition:.35s}
-.step:hover{border-color:rgba(232,150,63,.35);transform:translateY(-5px)}
-.step::before{counter-increment:step;content:"0" counter(step);position:absolute;top:14px;right:20px;
-  font-family:var(--display);font-size:64px;font-weight:700;color:rgba(255,255,255,.045);letter-spacing:-.04em}
-.step-ico{width:52px;height:52px;border-radius:15px;background:var(--accent-soft);border:1px solid rgba(232,150,63,.3);display:grid;place-items:center;font-size:23px;margin-bottom:20px}
-.step h3{font-family:var(--display);font-size:19.5px;letter-spacing:-.02em;margin-bottom:10px}
-.step p{color:var(--sub);font-size:14px;line-height:1.65}
+/* ════════ GAMES SHOWCASE ════════ */
+#games{padding:40px 0 130px;position:relative}
+.gshow{display:grid;grid-template-columns:330px 1fr;gap:22px;margin-top:56px;align-items:stretch}
+.grail{display:flex;flex-direction:column;border:1px solid var(--hair);border-radius:18px;overflow:hidden;background:var(--panel)}
+.gtab{display:flex;align-items:center;gap:16px;padding:19px 22px;border-bottom:1px solid var(--hair);cursor:pointer;
+  transition:background .25s;position:relative;text-align:left;width:100%}
+.gtab:last-child{border-bottom:0}
+.gtab .num{font-family:var(--mono);font-size:10.5px;color:var(--ink4);letter-spacing:.05em;width:22px}
+.gtab .nm{font-family:var(--disp);font-size:16.5px;font-weight:600;letter-spacing:-.02em;flex:1}
+.gtab .st{font-family:var(--mono);font-size:9px;letter-spacing:.16em;padding:4px 8px;border-radius:5px}
+.st-on{color:var(--ok);border:1px solid rgba(74,222,128,.3);background:rgba(74,222,128,.06)}
+.st-beta{color:#6aa8ff;border:1px solid rgba(106,168,255,.3);background:rgba(106,168,255,.06)}
+.st-soon{color:var(--ink3);border:1px solid var(--hair2)}
+.gtab::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--cu);transform:scaleY(0);transition:.3s}
+.gtab.on{background:rgba(255,255,255,.025)}
+.gtab.on::before{transform:none}
+.gtab.on .nm{color:var(--cu)}
+.gpane{position:relative;border:1px solid var(--hair);border-radius:18px;overflow:hidden;background:var(--panel);min-height:520px;display:flex;flex-direction:column}
+.gscene{position:relative;height:250px;overflow:hidden;flex-shrink:0}
+.gscene .layer{position:absolute;inset:-6%;transition:transform 1s cubic-bezier(.2,.8,.3,1)}
+.gscene::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 45%,var(--panel) 97%)}
+/* scènes par jeu — art en couches, sobre */
+.sc-terraria .l1{background:linear-gradient(180deg,#16283b,#274b5c 60%,#2c5a36)}
+.sc-terraria .l2{background:radial-gradient(140px 90px at 78% 30%,rgba(255,215,110,.6),transparent 70%)}
+.sc-terraria .l3{background:
+  radial-gradient(52% 70% at 18% 108%,#1e3a25 58%,transparent 59%),
+  radial-gradient(48% 66% at 55% 112%,#264a2e 58%,transparent 59%),
+  radial-gradient(50% 62% at 92% 110%,#1c3823 58%,transparent 59%)}
+.sc-java .l1{background:linear-gradient(165deg,#191009,#31200f 62%,#1d1207)}
+.sc-java .l2{background-image:linear-gradient(rgba(232,150,63,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(232,150,63,.09) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(70% 90% at 50% 40%,#000,transparent 80%)}
+.sc-java .l3{background:radial-gradient(120px 120px at 72% 62%,rgba(109,180,87,.35),transparent 70%)}
+.sc-bedrock .l1{background:linear-gradient(160deg,#0f2415,#1d4527 60%,#132c19)}
+.sc-bedrock .l2{background-image:linear-gradient(30deg,rgba(255,255,255,.05) 12%,transparent 12.5%,transparent 87%,rgba(255,255,255,.05) 87.5%),linear-gradient(150deg,rgba(0,0,0,.3) 12%,transparent 12.5%,transparent 87%,rgba(0,0,0,.3) 87.5%);background-size:46px 80px}
+.sc-bedrock .l3{background:radial-gradient(140px 100px at 50% 45%,rgba(126,201,143,.28),transparent 72%)}
+.sc-tmod .l1{background:linear-gradient(160deg,#170d24,#2c1847 62%,#120a1c)}
+.sc-tmod .l2{background:radial-gradient(150px 150px at 50% 42%,rgba(186,132,255,.3),transparent 70%)}
+.sc-tmod .l3{background-image:radial-gradient(rgba(186,132,255,.35) 1px,transparent 1.5px);background-size:26px 26px;mask-image:radial-gradient(70% 80% at 50% 45%,#000,transparent 85%)}
+.sc-stardew .l1{background:linear-gradient(175deg,#3c250e,#6e4517 45%,#375c26 80%,#2a481d)}
+.sc-stardew .l2{background:radial-gradient(90px 90px at 22% 26%,rgba(255,215,110,.55),transparent 70%)}
+.sc-stardew .l3{background:repeating-linear-gradient(100deg,transparent 0 34px,rgba(0,0,0,.14) 34px 68px)}
+.gbody{padding:26px 30px 30px;display:flex;flex-direction:column;gap:0;flex:1}
+.ghead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.ghead h3{font-family:var(--disp);font-size:27px;font-weight:600;letter-spacing:-.03em}
+.ghead .engine{font-family:var(--mono);font-size:10.5px;color:var(--ink3);letter-spacing:.06em}
+.gdesc{color:var(--ink2);font-size:14.5px;line-height:1.7;margin-top:12px;max-width:560px}
+.gspecs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);border:1px solid var(--hair);border-radius:13px;overflow:hidden;margin-top:22px}
+.gspec{background:var(--panel2);padding:13px 16px}
+.gspec b{font-family:var(--mono);font-size:13.5px;font-weight:600;display:block}
+.gspec span{font-size:9.5px;color:var(--ink3);letter-spacing:.13em;text-transform:uppercase;font-weight:600}
+.gvers{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:22px}
+.vc{font-family:var(--mono);font-size:10.5px;font-weight:500;padding:5px 10px;border-radius:7px;color:var(--cu);
+  background:var(--cu-dim);border:1px solid rgba(232,150,63,.28)}
+.vc.dim{color:var(--ink3);background:transparent;border-color:var(--hair2)}
+.gpane-content{display:none;flex-direction:column;flex:1}
+.gpane-content.on{display:flex;animation:fadeUp .55s cubic-bezier(.16,.8,.3,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
 
-/* ═══════════ Features ═══════════ */
-#features{background:linear-gradient(180deg,transparent,rgba(232,150,63,.03) 50%,transparent)}
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:54px}
-.feat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:30px 26px;transition:.35s}
-.feat:hover{transform:translateY(-5px);border-color:var(--line-hi);box-shadow:0 20px 50px rgba(0,0,0,.4)}
-.feat-ico{font-size:26px;margin-bottom:16px;display:block}
-.feat h3{font-family:var(--display);font-size:17.5px;margin-bottom:9px;letter-spacing:-.01em}
-.feat p{color:var(--sub);font-size:13.8px;line-height:1.65}
+/* ════════ HOW — sticky ════════ */
+#how{padding:120px 0}
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.how-sticky{position:sticky;top:130px;align-self:start}
+.how-steps{display:flex;flex-direction:column;gap:14px}
+.hstep{position:relative;border:1px solid var(--hair);border-radius:16px;padding:30px 30px 30px 78px;background:var(--panel);transition:border-color .4s,background .4s}
+.hstep .n{position:absolute;left:28px;top:30px;font-family:var(--mono);font-size:12px;color:var(--ink4);transition:color .4s}
+.hstep h3{font-family:var(--disp);font-size:19px;font-weight:600;letter-spacing:-.02em;margin-bottom:9px;transition:color .4s}
+.hstep p{color:var(--ink3);font-size:14px;line-height:1.7;transition:color .4s}
+.hstep.lit{border-color:rgba(232,150,63,.4);background:linear-gradient(120deg,rgba(232,150,63,.05),var(--panel) 55%)}
+.hstep.lit .n{color:var(--cu)}
+.hstep.lit p{color:var(--ink2)}
+.how-cta{margin-top:34px}
 
-/* ═══════════ Pricing ═══════════ */
-.price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,430px));gap:22px;margin-top:54px;justify-content:center}
-.plan{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:38px 34px;position:relative;transition:.35s}
-.plan:hover{transform:translateY(-6px)}
-.plan.pro{border-color:rgba(232,150,63,.5);background:linear-gradient(170deg,rgba(232,150,63,.08),var(--surface) 45%);box-shadow:0 30px 80px rgba(232,150,63,.12)}
-.plan-tag{position:absolute;top:-13px;left:34px;background:linear-gradient(135deg,var(--accent-hi),var(--accent));color:#16100a;
-  font-size:11px;font-weight:800;letter-spacing:1px;border-radius:99px;padding:6px 15px}
-.plan h3{font-family:var(--display);font-size:22px;letter-spacing:-.02em}
-.plan .price{font-family:var(--display);font-size:46px;font-weight:700;letter-spacing:-.03em;margin:16px 0 4px}
-.plan .price small{font-size:15px;color:var(--faint);font-weight:500;letter-spacing:0}
-.plan ul{list-style:none;margin:26px 0 30px;display:grid;gap:13px}
-.plan li{display:flex;gap:11px;font-size:14.3px;color:var(--sub);line-height:1.5}
-.plan li b{color:var(--text);font-weight:600}
-.check{color:var(--green);font-weight:800;flex-shrink:0}
-.plan .btn{width:100%;justify-content:center}
+/* ════════ BENTO ════════ */
+#bento{padding:20px 0 130px}
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:56px}
+.cell{position:relative;border:1px solid var(--hair);border-radius:18px;background:var(--panel);padding:28px;overflow:hidden}
+.cell h3{font-family:var(--disp);font-size:17px;font-weight:600;letter-spacing:-.015em;margin:16px 0 8px}
+.cell p{color:var(--ink3);font-size:13.5px;line-height:1.65}
+.cell .ic{width:36px;height:36px;border-radius:11px;border:1px solid var(--hair2);background:rgba(255,255,255,.025);display:grid;place-items:center;color:var(--cu)}
+.cell .ic svg{width:17px;height:17px}
+.c-relay{grid-column:span 5}
+.c-term{grid-column:span 7;display:flex;flex-direction:column}
+.c-big{grid-column:span 4;display:flex;flex-direction:column;justify-content:flex-end;min-height:210px}
+.c-big b{font-family:var(--disp);font-size:58px;font-weight:700;letter-spacing:-.045em;line-height:1}
+.c-big b i{font-style:normal;color:var(--cu)}
+.c-vers{grid-column:span 4}
+.c-bg{grid-column:span 4}
+.mini-term{margin-top:18px;background:#0b0b0e;border:1px solid var(--hair);border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:11px;line-height:2;flex:1}
+.vers-wall{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+/* spotlight border : géré en JS via --mx/--my */
+.spot{position:relative}
+.spot::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;
+  background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(232,150,63,.55),transparent 70%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .4s;pointer-events:none}
+.spot:hover::before{opacity:1}
 
-/* ═══════════ FAQ ═══════════ */
-.faq{max-width:760px;margin:54px auto 0;display:grid;gap:12px}
-.qa{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.3s}
-.qa[open]{border-color:rgba(232,150,63,.35)}
-.qa summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:20px 24px;font-weight:600;font-size:15.5px;cursor:pointer}
+/* ════════ PRICING ════════ */
+#pricing{padding:120px 0;background:linear-gradient(180deg,transparent,rgba(255,255,255,.014) 50%,transparent)}
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,440px));gap:16px;justify-content:center;margin-top:56px}
+.plan{border:1px solid var(--hair);border-radius:22px;background:var(--panel);padding:36px;display:flex;flex-direction:column}
+.plan.hot{border-color:rgba(232,150,63,.45);background:linear-gradient(165deg,rgba(232,150,63,.07),var(--panel) 50%)}
+.plan-top{display:flex;align-items:center;justify-content:space-between}
+.plan h3{font-family:var(--disp);font-size:19px;font-weight:600}
+.plan-tag{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--cu);border:1px solid rgba(232,150,63,.4);border-radius:99px;padding:4px 10px}
+.pr{margin:22px 0 6px;display:flex;align-items:baseline;gap:8px}
+.pr b{font-family:var(--disp);font-size:52px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.pr span{color:var(--ink3);font-size:13px}
+.pr-note{font-size:12px;color:var(--ink3)}
+.plan ul{list-style:none;margin:26px 0 30px;display:grid;gap:0}
+.plan li{display:flex;gap:12px;font-size:14px;color:var(--ink2);line-height:1.5;padding:11px 0;border-top:1px solid var(--hair)}
+.plan li b{color:var(--ink);font-weight:600}
+.plan li svg{width:15px;height:15px;color:var(--ok);flex-shrink:0;margin-top:2px}
+.plan .btn{justify-content:center;margin-top:auto}
+
+/* ════════ FAQ ════════ */
+#faq{padding:110px 0 130px}
+.faq{max-width:720px;margin:52px auto 0}
+.qa{border-top:1px solid var(--hair)}
+.qa:last-child{border-bottom:1px solid var(--hair)}
+.qa summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:23px 4px;cursor:pointer;font-weight:600;font-size:15.5px;font-family:var(--disp);letter-spacing:-.01em;transition:color .2s}
+.qa summary:hover{color:var(--cu2)}
 .qa summary::-webkit-details-marker{display:none}
-.qa summary::after{content:"+";font-family:var(--display);font-size:22px;color:var(--accent);transition:.3s;flex-shrink:0}
-.qa[open] summary::after{transform:rotate(45deg)}
-.qa p{padding:0 24px 22px;color:var(--sub);font-size:14.3px;line-height:1.7}
+.qa summary .x{position:relative;width:14px;height:14px;flex-shrink:0}
+.qa summary .x::before,.qa summary .x::after{content:"";position:absolute;background:var(--cu);transition:.3s}
+.qa summary .x::before{inset:6px 0;height:2px;top:6px}
+.qa summary .x::after{inset:0 6px;width:2px;left:6px}
+.qa[open] summary .x::after{transform:rotate(90deg);opacity:0}
+.qa p{padding:0 4px 24px;color:var(--ink2);font-size:14.3px;line-height:1.75;max-width:640px}
 
-/* ═══════════ CTA final + footer ═══════════ */
-.final{position:relative;text-align:center;padding:130px 0 120px;overflow:hidden}
-.final h2{font-size:clamp(34px,4.6vw,56px)}
-.final .btn{margin-top:12px}
-footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--faint);font-size:13px}
-.foot-grid{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between}
-.foot-links{display:flex;gap:22px;flex-wrap:wrap}
-.foot-links a:hover{color:var(--text)}
-.disclaim{margin-top:22px;font-size:11.5px;line-height:1.7;color:#43474f;max-width:760px}
+/* ════════ FINAL ════════ */
+.final{position:relative;padding:150px 0 150px;text-align:center;overflow:hidden}
+.final .halo{position:absolute;width:820px;height:480px;left:50%;bottom:-260px;transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(232,150,63,.18),transparent 65%);filter:blur(44px)}
+.final h2{font-size:clamp(38px,5.4vw,70px)}
+.final .sub{margin:20px auto 0}
+.final .btn{margin-top:38px;font-size:15px;padding:16px 30px}
 
-/* ═══════════ Responsive ═══════════ */
-@media(max-width:1020px){
-  .hero-grid{grid-template-columns:1fr;gap:70px}
-  .phone-zone{order:2}
-  .games-grid{grid-template-columns:repeat(2,1fr)}
-  .gcard.big,.gcard.small{grid-column:span 1}
-  .steps,.feat-grid{grid-template-columns:1fr 1fr}
-  .nav-links{display:none}
+/* ════════ FOOTER ════════ */
+footer{position:relative;border-top:1px solid var(--hair);padding:70px 0 46px;overflow:hidden;background:var(--bg2)}
+.f-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:44px;position:relative;z-index:2}
+.f-col h5{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+.f-col a{display:block;font-size:13.5px;color:var(--ink2);padding:6px 0;transition:color .2s}
+.f-col a:hover{color:var(--cu2)}
+.f-brand p{color:var(--ink3);font-size:13px;line-height:1.7;margin-top:16px;max-width:300px}
+.f-bottom{margin-top:60px;padding-top:26px;border-top:1px solid var(--hair);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:11.5px;color:var(--ink4);position:relative;z-index:2}
+.f-water{position:absolute;left:50%;bottom:-56px;transform:translateX(-50%);font-family:var(--disp);font-weight:700;
+  font-size:clamp(90px,15vw,220px);letter-spacing:-.05em;color:rgba(255,255,255,.018);white-space:nowrap;pointer-events:none;user-select:none}
+
+/* ════════ RESPONSIVE ════════ */
+@media(max-width:1060px){
+  .hero{grid-template-columns:1fr;gap:70px}
+  .stage{height:540px;max-width:460px;margin:0 auto}
+  .gshow{grid-template-columns:1fr}
+  .grail{flex-direction:row;overflow-x:auto}
+  .gtab{border-bottom:0;border-right:1px solid var(--hair);min-width:190px}
+  .gtab::before{width:100%;height:2px;top:auto}
+  .how-grid{grid-template-columns:1fr;gap:50px}
+  .how-sticky{position:static}
+  .c-relay,.c-term,.c-big,.c-vers,.c-bg{grid-column:span 12}
+  .nav-l{display:none}
+  .f-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
-  .steps,.feat-grid,.price-grid,.games-grid{grid-template-columns:1fr}
-  .hero-stats{gap:22px;flex-wrap:wrap}
-  section{padding:80px 0}
-  .toast{display:none}
-  .phone{width:290px;height:596px}
+  .plans{grid-template-columns:1fr}
+  .stage{transform:scale(.82);transform-origin:top center;height:470px}
+  .h-proof{gap:18px}.proof-sep{display:none}
+  .wrap{padding:0 22px}
+  .gspecs{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -258,22 +332,21 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--faint);f
 
 <!-- ═══════════ NAV ═══════════ -->
 <nav>
-  <div class="nav-inner">
-    <a class="brand" href="#">
-      <span class="bolt"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#16100a"/></svg></span>
-      LightPocket
+  <div class="nav-in">
+    <a class="logo" href="#">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#140d05"/></svg></span>
+      LightPocket <span class="beta">BÊTA</span>
     </a>
-    <div class="nav-links">
+    <div class="nav-l">
       <a href="#games" data-i18n="nav.games">Jeux</a>
-      <a href="#how" data-i18n="nav.how">Comment ça marche</a>
-      <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
+      <a href="#how" data-i18n="nav.how">Fonctionnement</a>
+      <a href="#bento" data-i18n="nav.features">Capacités</a>
       <a href="#pricing" data-i18n="nav.pricing">Tarifs</a>
-      <a href="#faq">FAQ</a>
     </div>
-    <div class="nav-cta">
-      <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
-      <a class="btn btn-accent" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
-        <svg width="15" height="16" viewBox="0 0 24 24" fill="#16100a"><path d="M3 2.5v19l11-9.5L3 2.5zm13.5 7.3 3.8 2.2c1 .6 1 1.4 0 2l-3.8 2.2-3-3.2 3-3.2z"/></svg>
+    <div class="nav-r">
+      <button class="lang" id="langBtn" onclick="toggleLang()"><b>FR</b> / EN</button>
+      <a class="btn btn-cu" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
+        <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3.2v17.6c0 .3.35.5.6.33L15 12 4.6 2.87a.38.38 0 0 0-.6.33zM16.4 10.6l2.9 1.68c.5.3.5.94 0 1.24l-2.9 1.68L13.6 12l2.8-1.4z"/></svg>
         <span data-i18n="nav.get">Télécharger</span>
       </a>
     </div>
@@ -282,181 +355,280 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--faint);f
 
 <!-- ═══════════ HERO ═══════════ -->
 <header>
-  <div class="glow" style="width:640px;height:640px;background:rgba(232,150,63,.13);top:-200px;right:-160px"></div>
-  <div class="glow" style="width:460px;height:460px;background:rgba(63,207,118,.06);bottom:-140px;left:-120px"></div>
-  <div class="wrap hero-grid">
+  <div class="hero-bg"><div class="grid"></div><div class="halo"></div></div>
+  <div class="wrap hero">
     <div>
-      <span class="pill"><span class="dot"></span><span data-i18n="hero.pill">BÊTA OUVERTE · ANDROID</span></span>
-      <h1 data-i18n-html="hero.h1">Tes serveurs de jeux.<br><span class="grad">Dans ta poche.</span></h1>
-      <p class="hero-sub" data-i18n="hero.sub">Héberge des serveurs Terraria et Minecraft — Bedrock comme Java — directement depuis ton téléphone. Pas de PC. Pas de location. Tes amis rejoignent en 30 secondes avec un simple lien.</p>
-      <div class="hero-ctas">
-        <a class="btn btn-accent" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
-          <svg width="16" height="17" viewBox="0 0 24 24" fill="#16100a"><path d="M3 2.5v19l11-9.5L3 2.5zm13.5 7.3 3.8 2.2c1 .6 1 1.4 0 2l-3.8 2.2-3-3.2 3-3.2z"/></svg>
-          <span data-i18n="hero.cta1">Télécharger sur Google Play</span>
+      <span class="h-badge"><span class="led"><i></i></span><span data-i18n="hero.badge">Bêta fermée en cours — 88 testeurs actifs</span></span>
+      <h1 data-i18n-html="hero.h1">Le serveur,<br>c'est ton <em>téléphone.</em></h1>
+      <p class="h-sub" data-i18n-html="hero.sub">Des serveurs <b>Terraria</b> et <b>Minecraft</b> — Bedrock et Java — hébergés sur de vrais moteurs dédiés, depuis Android. Adresse publique en 30 secondes. Aucun PC, aucune location.</p>
+      <div class="h-ctas">
+        <a class="btn btn-cu magnetic" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
+          <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3.2v17.6c0 .3.35.5.6.33L15 12 4.6 2.87a.38.38 0 0 0-.6.33zM16.4 10.6l2.9 1.68c.5.3.5.94 0 1.24l-2.9 1.68L13.6 12l2.8-1.4z"/></svg>
+          <span data-i18n="hero.cta1">Rejoindre la bêta</span>
         </a>
-        <a class="btn btn-ghost" href="#games" data-i18n="hero.cta2">Voir les jeux ↓</a>
+        <a class="btn btn-line" href="#games" data-i18n="hero.cta2">Explorer les jeux</a>
       </div>
-      <div class="hero-stats">
-        <div class="hstat"><b>3</b><span data-i18n="hero.s1">jeux hébergeables</span></div>
-        <div class="hstat"><b>30 s</b><span data-i18n="hero.s2">pour être en ligne</span></div>
-        <div class="hstat"><b>0 €</b><span data-i18n="hero.s3">pour commencer</span></div>
+      <div class="h-proof">
+        <div class="proof"><b data-count="88">0</b><span data-i18n="p.testers">bêta-testeurs</span></div>
+        <div class="proof-sep"></div>
+        <div class="proof"><b><i data-count="58">0</i></b><span data-i18n="p.servers">serveurs lancés en bêta</span></div>
+        <div class="proof-sep"></div>
+        <div class="proof"><b data-count="3460">0</b><span data-i18n="p.plugins">plugins Java compatibles</span></div>
       </div>
     </div>
 
-    <div class="phone-zone">
-      <div class="toast" id="toast1"><div class="avatar">⛏️</div><div><b>Mohamed_91</b><span data-i18n="toast.joined">vient de rejoindre</span></div></div>
-      <div class="toast" id="toast2"><div class="avatar">🧟</div><div><b>xKira</b><span data-i18n="toast.joined2">vient de rejoindre</span></div></div>
-      <div class="phone">
-        <div class="screen">
-          <div class="notch"></div>
-          <div class="app-head">
-            <span class="bolt"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#16100a"/></svg></span>
-            <span class="app-title" id="phoneGame">Minecraft Java</span>
-            <span class="status-pill"><span class="dot"></span><span data-i18n="phone.online">EN LIGNE</span></span>
-          </div>
-          <div class="srv-row">
-            <div class="metric"><b id="mUp">02:41:07</b><span>Uptime</span></div>
-            <div class="metric"><b id="mPlayers">2/10</b><span data-i18n="phone.players">Joueurs</span></div>
-            <div class="metric"><b>1.4 Go</b><span>RAM</span></div>
-          </div>
-          <div class="console" id="console"></div>
-          <div class="addr-bar">🔗 <span id="phoneAddr">play.lightpocket.gg:7794</span></div>
+    <!-- composition produit -->
+    <div class="stage" id="stage">
+      <div class="card3 dash" data-depth="12">
+        <div class="dash-head">
+          <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#140d05"/></svg></span>
+          <b id="dashGame">Minecraft Java · 1.20.1</b>
+          <span class="env"><i></i>ONLINE</span>
         </div>
+        <div class="dash-metrics">
+          <div class="dm"><b id="mUp">02:41:07</b><span>Uptime</span></div>
+          <div class="dm"><b>1.4G</b><span>RAM</span></div>
+          <div class="dm"><b>14ms</b><span>Tick</span></div>
+        </div>
+        <div class="term" id="term"></div>
+        <div class="dash-addr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+          <span id="dashAddr">play.lightpocket.gg:7794</span>
+        </div>
+      </div>
+      <div class="card3 players3" data-depth="26">
+        <h4><span data-i18n="stage.players">Joueurs</span> <b>3/10</b></h4>
+        <div class="prow" style="border-top:0"><span class="pavat" style="background:linear-gradient(135deg,#3f7d4a,#7ec98f)"></span><div><b>Mohamed_91</b><span data-i18n="stage.j1">connecté · 42 min</span></div><span class="ping">23ms</span></div>
+        <div class="prow"><span class="pavat" style="background:linear-gradient(135deg,#5a4a8f,#9a7ec9)"></span><div><b>xKira</b><span data-i18n="stage.j2">connecté · 18 min</span></div><span class="ping">31ms</span></div>
+        <div class="prow"><span class="pavat" style="background:linear-gradient(135deg,#8f5a3a,#c99a6e)"></span><div><b>Nova_77</b><span data-i18n="stage.j3">connecté · 3 min</span></div><span class="ping">45ms</span></div>
+      </div>
+      <div class="card3 notif3" data-depth="34">
+        <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#140d05"/></svg></span>
+        <div><b>LightPocket</b><span data-i18n="stage.notif">xKira a rejoint « Monde de Léo »</span></div>
+      </div>
+      <div class="chip3" data-depth="20">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span data-i18n="stage.chip">écran éteint · serveur actif</span>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ═══════════ MARQUEE ═══════════ -->
-<div class="marquee">
-  <div class="marquee-track" id="marquee">
-    <span>TERRARIA 1.4<i></i></span><span>MINECRAFT BEDROCK 26.x<i></i></span><span>MINECRAFT JAVA 1.8.8 → 26.x<i></i></span>
-    <span>ADDONS CURSEFORGE<i></i></span><span>PLUGINS MODRINTH<i></i></span><span>TMODLOADER — BIENTÔT<i></i></span><span>STARDEW VALLEY — BIENTÔT<i></i></span>
-  </div>
-</div>
+<!-- ═══════════ TICKER ═══════════ -->
+<div class="ticker"><div class="tick-in" id="ticker">
+  <span><b>Terraria</b>&nbsp;· TShock 6.1</span>
+  <span><b>Minecraft Java</b>&nbsp;· 1.8.8 → 26.1.2</span>
+  <span><b>Minecraft Bedrock</b>&nbsp;· 26.32</span>
+  <span><b>Plugins</b>&nbsp;· Modrinth API</span>
+  <span><b>Addons</b>&nbsp;· CurseForge API</span>
+  <span><b>tModLoader</b>&nbsp;· en développement</span>
+  <span><b>Stardew Valley</b>&nbsp;· feuille de route</span>
+</div></div>
 
-<!-- ═══════════ GALERIE DE JEUX ═══════════ -->
+<!-- ═══════════ MANIFESTO ═══════════ -->
+<section class="manifesto">
+  <div class="wrap reveal">
+    <span class="k" data-i18n="man.k">Pourquoi LightPocket</span>
+    <p data-i18n-html="man.p">Louer un serveur coûte <b>5 € par mois</b>. Laisser un PC allumé toute la nuit, encore plus. Pourtant le téléphone dans ta poche est <em>déjà</em> un ordinateur ARM à huit cœurs. <b>On l'a juste transformé en machine de jeu dédiée.</b></p>
+  </div>
+</section>
+
+<!-- ═══════════ GAMES ═══════════ -->
 <section id="games">
-  <div class="glow" style="width:520px;height:520px;background:rgba(232,150,63,.07);top:8%;left:-190px"></div>
   <div class="wrap">
     <div class="reveal">
-      <span class="eyebrow" data-i18n="games.eyebrow">La galerie</span>
-      <h2 data-i18n-html="games.h2">Un téléphone.<br>Tous tes serveurs.</h2>
-      <p class="sec-sub" data-i18n="games.sub">Chaque jeu tourne sur un vrai moteur serveur, optimisé pour ARM. Choisis, crée un monde, héberge — et la galerie s'agrandit.</p>
+      <span class="k" data-i18n="games.k">La galerie</span>
+      <h2 data-i18n-html="games.h2">Choisis ton jeu.<br>On fournit <span class="serif-i" style="color:var(--cu)">le moteur.</span></h2>
     </div>
-    <div class="games-grid">
-      <div class="gcard big reveal">
-        <div class="gart"><div class="art-terraria"></div></div>
-        <div class="gbody">
-          <div class="gtop"><span class="gname">Terraria</span><span class="gbadge b-live" data-i18n="g.live">DISPONIBLE</span></div>
-          <p class="gdesc" data-i18n="g.terraria">Le bac à sable 2D culte, propulsé par TShock. Mondes petits à grands, difficulté Classique à Maître, commandes admin complètes depuis ta poche.</p>
-          <div class="gvers"><span class="vchip">TShock 6.1</span><span class="vchip">1.4.5</span><span class="vchip dim">~1 Go RAM</span></div>
-        </div>
+    <div class="gshow reveal">
+      <div class="grail" id="grail">
+        <button class="gtab on" data-g="0"><span class="num">01</span><span class="nm">Terraria</span><span class="st st-on">LIVE</span></button>
+        <button class="gtab" data-g="1"><span class="num">02</span><span class="nm">Minecraft Java</span><span class="st st-beta">BÊTA</span></button>
+        <button class="gtab" data-g="2"><span class="num">03</span><span class="nm">Minecraft Bedrock</span><span class="st st-beta">BÊTA</span></button>
+        <button class="gtab" data-g="3"><span class="num">04</span><span class="nm">tModLoader</span><span class="st st-soon" data-i18n="g.soon">BIENTÔT</span></button>
+        <button class="gtab" data-g="4"><span class="num">05</span><span class="nm">Stardew Valley</span><span class="st st-soon" data-i18n="g.soon2">BIENTÔT</span></button>
       </div>
-      <div class="gcard big reveal">
-        <div class="gart"><div class="art-java"></div></div>
-        <div class="gbody">
-          <div class="gtop"><span class="gname">Minecraft Java</span><span class="gbadge b-beta">BÊTA</span></div>
-          <p class="gdesc" data-i18n="g.java">Paper natif ARM — sans émulation. Choisis TA version : la 1.8.8 pour le PvP, la légendaire 1.20.1, ou la toute dernière. Plugins Modrinth intégrés, compatibilité vérifiée.</p>
-          <div class="gvers"><span class="vchip">26.1.2</span><span class="vchip">1.21.1</span><span class="vchip">1.20.1</span><span class="vchip">1.16.5</span><span class="vchip">1.8.8 · PvP</span></div>
+      <div class="gpane" id="gpane">
+        <div class="gscene" id="gscene">
+          <div class="layer l1"></div><div class="layer l2" data-px="14"></div><div class="layer l3" data-px="26"></div>
         </div>
-      </div>
-      <div class="gcard small reveal">
-        <div class="gart"><div class="art-bedrock"></div></div>
-        <div class="gbody">
-          <div class="gtop"><span class="gname">Bedrock</span><span class="gbadge b-beta">BÊTA</span></div>
-          <p class="gdesc" data-i18n="g.bedrock">Le vrai serveur dédié Mojang. Addons, maps et packs de textures CurseForge en deux taps.</p>
-          <div class="gvers"><span class="vchip">26.32</span><span class="vchip dim">+5 versions</span></div>
+        <!-- 0 · Terraria -->
+        <div class="gpane-content on">
+          <div class="gbody">
+            <div class="ghead"><h3>Terraria</h3><span class="engine">TShock 6.1 · .NET 9 natif ARM</span></div>
+            <p class="gdesc" data-i18n="gd.terraria">Le moteur d'hébergement le plus rodé de l'app. Génération de monde complète (jungle, donjon, îles célestes), difficulté Classique à Maître, kick/ban et commandes admin en direct depuis la console.</p>
+            <div class="gspecs">
+              <div class="gspec"><b>~1 Go</b><span>RAM</span></div>
+              <div class="gspec"><b>45 s</b><span data-i18n="gs.boot">démarrage</span></div>
+              <div class="gspec"><b>8</b><span data-i18n="gs.players">joueurs max</span></div>
+            </div>
+            <div class="gvers"><span class="vc">1.4.5</span><span class="vc dim" data-i18n="gv.tshock">plugins TShock</span><span class="vc dim" data-i18n="gv.import">import .wld</span></div>
+          </div>
         </div>
-      </div>
-      <div class="gcard small reveal">
-        <div class="gart"><div class="art-tmod"></div></div>
-        <div class="gbody">
-          <div class="gtop"><span class="gname">tModLoader</span><span class="gbadge b-soon" data-i18n="g.soon">BIENTÔT</span></div>
-          <p class="gdesc" data-i18n="g.tmod">Terraria moddé — Calamity, Thorium et des milliers de mods, hébergés depuis ton tel.</p>
-          <div class="gvers"><span class="vchip dim" data-i18n="g.indev">En développement</span></div>
+        <!-- 1 · Java -->
+        <div class="gpane-content">
+          <div class="gbody">
+            <div class="ghead"><h3>Minecraft Java</h3><span class="engine">Paper · JVM Temurin native ARM</span></div>
+            <p class="gdesc" data-i18n="gd.java">Aucune émulation : la JVM tourne en natif. Choisis ta version — la 1.8.8 pour le PvP, la légendaire 1.20.1, ou la toute dernière — chacune avec son runtime Java dédié et ses mondes isolés. Plugins Modrinth avec compatibilité vérifiée par version.</p>
+            <div class="gspecs">
+              <div class="gspec"><b>~1,5 Go</b><span>RAM</span></div>
+              <div class="gspec"><b>5</b><span>versions</span></div>
+              <div class="gspec"><b>3 460+</b><span>plugins</span></div>
+            </div>
+            <div class="gvers"><span class="vc">26.1.2</span><span class="vc">1.21.1</span><span class="vc">1.20.1</span><span class="vc">1.16.5</span><span class="vc">1.8.8 — PvP</span></div>
+          </div>
         </div>
-      </div>
-      <div class="gcard small reveal">
-        <div class="gart"><div class="art-stardew"></div></div>
-        <div class="gbody">
-          <div class="gtop"><span class="gname">Stardew Valley</span><span class="gbadge b-soon" data-i18n="g.soon2">BIENTÔT</span></div>
-          <p class="gdesc" data-i18n="g.stardew">Ta ferme coop, accessible à tes amis même quand ton PC dort.</p>
-          <div class="gvers"><span class="vchip dim" data-i18n="g.roadmap">Sur la feuille de route</span></div>
+        <!-- 2 · Bedrock -->
+        <div class="gpane-content">
+          <div class="gbody">
+            <div class="ghead"><h3>Minecraft Bedrock</h3><span class="engine">Bedrock Dedicated Server · Box64</span></div>
+            <p class="gdesc" data-i18n="gd.bedrock">Le serveur dédié officiel de Mojang, traduit x86 → ARM à la volée. Addons, maps et packs de textures depuis CurseForge, import local de .mcworld, et un mode Économie RAM pour les appareils modestes.</p>
+            <div class="gspecs">
+              <div class="gspec"><b>~4,5 Go</b><span>RAM</span></div>
+              <div class="gspec"><b>26.32</b><span>version</span></div>
+              <div class="gspec"><b>8 384</b><span>addons</span></div>
+            </div>
+            <div class="gvers"><span class="vc">26.32</span><span class="vc dim">+5 versions</span><span class="vc dim" data-i18n="gv.mcworld">import .mcworld</span></div>
+          </div>
+        </div>
+        <!-- 3 · tModLoader -->
+        <div class="gpane-content">
+          <div class="gbody">
+            <div class="ghead"><h3>tModLoader</h3><span class="engine" data-i18n="ge.tmod">en développement · moteur .NET partagé</span></div>
+            <p class="gdesc" data-i18n="gd.tmod">Terraria moddé — Calamity, Thorium, Fargo's… Le moteur réutilise notre stack .NET éprouvée sur Terraria, sans émulation. C'est le prochain jeu de la galerie.</p>
+            <div class="gspecs">
+              <div class="gspec"><b>~2 Go</b><span data-i18n="gs.est">RAM estimée</span></div>
+              <div class="gspec"><b>1000+</b><span>mods</span></div>
+              <div class="gspec"><b>2026</b><span data-i18n="gs.eta">arrivée</span></div>
+            </div>
+            <div class="gvers"><span class="vc dim" data-i18n="gv.indev">développement en cours</span></div>
+          </div>
+        </div>
+        <!-- 4 · Stardew -->
+        <div class="gpane-content">
+          <div class="gbody">
+            <div class="ghead"><h3>Stardew Valley</h3><span class="engine" data-i18n="ge.stardew">à l'étude · feuille de route</span></div>
+            <p class="gdesc" data-i18n="gd.stardew">Ta ferme coop accessible à tes amis, même PC éteint. Le multijoueur Stardew n'a pas de serveur dédié officiel — on travaille sur la bonne approche plutôt qu'une approche fragile.</p>
+            <div class="gspecs">
+              <div class="gspec"><b>4</b><span data-i18n="gs.coop">joueurs coop</span></div>
+              <div class="gspec"><b>SMAPI</b><span data-i18n="gs.envisioned">envisagé</span></div>
+              <div class="gspec"><b>—</b><span data-i18n="gs.eta2">pas de date</span></div>
+            </div>
+            <div class="gvers"><span class="vc dim" data-i18n="gv.roadmap">sur la feuille de route</span></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ COMMENT ÇA MARCHE ═══════════ -->
+<!-- ═══════════ HOW ═══════════ -->
 <section id="how">
-  <div class="wrap">
-    <div class="reveal">
-      <span class="eyebrow" data-i18n="how.eyebrow">Simple, vraiment</span>
-      <h2 data-i18n="how.h2">En ligne en trois gestes</h2>
+  <div class="wrap how-grid">
+    <div class="how-sticky reveal">
+      <span class="k" data-i18n="how.k">Fonctionnement</span>
+      <h2 data-i18n-html="how.h2">En ligne avant la fin de <span class="serif-i" style="color:var(--cu)">cette phrase.</span></h2>
+      <p class="sub" data-i18n="how.sub">Pas de VPS à configurer, pas de port à ouvrir sur ta box, pas de fichier de config. L'app fait le travail d'un administrateur système — toi, tu joues.</p>
+      <div class="how-cta">
+        <a class="btn btn-line" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener" data-i18n="how.cta">Essayer maintenant</a>
+      </div>
     </div>
-    <div class="steps">
-      <div class="step reveal"><span class="step-ico">🎮</span><h3 data-i18n="how.1t">Choisis ton jeu</h3><p data-i18n="how.1p">Terraria, Minecraft Bedrock ou Java. Chaque moteur est téléchargé à la demande, vérifié, et optimisé pour ton appareil.</p></div>
-      <div class="step reveal"><span class="step-ico">🌍</span><h3 data-i18n="how.2t">Crée ton monde</h3><p data-i18n="how.2p">Assistant guidé en 2 minutes ou mode expert avec tous les réglages server.properties. Importe même tes maps existantes.</p></div>
-      <div class="step reveal"><span class="step-ico">⚡</span><h3 data-i18n="how.3t">Partage ton lien</h3><p data-i18n="how.3p">Un tap sur Héberger : ton serveur reçoit une adresse publique. Tes amis la collent dans leur jeu — c'est tout.</p></div>
+    <div class="how-steps">
+      <div class="hstep"><span class="n">/01</span><h3 data-i18n="how.1t">Choisis le jeu, crée le monde</h3><p data-i18n="how.1p">Assistant guidé de deux minutes, ou mode expert avec chaque clé de server.properties. Le moteur du jeu se télécharge à la demande — vérifié par empreinte SHA-256, depuis les sources officielles.</p></div>
+      <div class="hstep"><span class="n">/02</span><h3 data-i18n="how.2t">Appuie sur Héberger</h3><p data-i18n="how.2p">Le serveur démarre dans un environnement Linux isolé sur ton téléphone. Notre relais lui attribue instantanément une adresse publique — ta box n'a rien à savoir, ton IP reste privée.</p></div>
+      <div class="hstep"><span class="n">/03</span><h3 data-i18n="how.3t">Envoie l'adresse</h3><p data-i18n="how.3p">Tes amis la collent dans leur jeu — PC, console ou mobile selon le jeu. Toi, tu suis les connexions en direct, la console, les métriques. Écran éteint, tout continue.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ FEATURES ═══════════ -->
-<section id="features">
+<!-- ═══════════ BENTO ═══════════ -->
+<section id="bento">
   <div class="wrap">
     <div class="reveal">
-      <span class="eyebrow" data-i18n="feat.eyebrow">Sous le capot</span>
-      <h2 data-i18n="feat.h2">Pensé comme un vrai hébergeur</h2>
-      <p class="sec-sub" data-i18n="feat.sub">Pas un gadget : de vrais moteurs serveurs, un relais mondial, et les outils d'admin qu'on attend d'un hosting sérieux.</p>
+      <span class="k" data-i18n="bento.k">Capacités</span>
+      <h2 data-i18n-html="bento.h2">Un vrai hébergeur.<br>Format <span class="serif-i" style="color:var(--cu)">poche.</span></h2>
     </div>
-    <div class="feat-grid">
-      <div class="feat reveal"><span class="feat-ico">🌐</span><h3 data-i18n="f.1t">Adresse publique instantanée</h3><p data-i18n="f.1p">Notre relais donne à ton serveur une adresse joignable partout dans le monde — pas de configuration de box, pas d'IP à ouvrir.</p></div>
-      <div class="feat reveal"><span class="feat-ico">🧩</span><h3 data-i18n="f.2t">Addons & plugins intégrés</h3><p data-i18n="f.2p">CurseForge pour Bedrock, Modrinth pour Java. Recherche, compatibilité vérifiée par version, installation en deux taps.</p></div>
-      <div class="feat reveal"><span class="feat-ico">🖥️</span><h3 data-i18n="f.3t">Console d'admin complète</h3><p data-i18n="f.3p">Logs en direct, commandes rapides, kick/ban, liste des joueurs en temps réel — le contrôle total, depuis l'écran de ton tel.</p></div>
-      <div class="feat reveal"><span class="feat-ico">🔋</span><h3 data-i18n="f.4t">Économie RAM intelligente</h3><p data-i18n="f.4p">Un preset qui borne distance de vue, tick et joueurs pour faire tourner un serveur même sur un téléphone modeste.</p></div>
-      <div class="feat reveal"><span class="feat-ico">🕰️</span><h3 data-i18n="f.5t">Multi-versions réelles</h3><p data-i18n="f.5p">Java de la 1.8.8 à la 26.x, chaque version avec son runtime dédié et ses mondes isolés. Ton monde 1.8 ne sera jamais corrompu.</p></div>
-      <div class="feat reveal"><span class="feat-ico">🔔</span><h3 data-i18n="f.6t">Vit en arrière-plan</h3><p data-i18n="f.6p">Écran éteint, le serveur continue. Notification avec uptime, joueurs connectés et bouton stop — comme un vrai daemon.</p></div>
+    <div class="bento reveal">
+      <div class="cell c-relay spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span>
+        <h3 data-i18n="b1.t">Relais mondial intégré</h3>
+        <p data-i18n="b1.p">Chaque serveur reçoit un port public dédié sur notre relais. Zéro configuration réseau, zéro exposition de ton IP personnelle — le tunnel est chiffré de ton téléphone jusqu'au relais.</p>
+      </div>
+      <div class="cell c-term spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m5 7 5 5-5 5M12 19h7"/></svg></span>
+        <h3 data-i18n="b2.t">Console d'administration réelle</h3>
+        <div class="mini-term">
+          <div><span style="color:var(--ink4)">$</span> <span style="color:var(--ink2)">ban xKira</span></div>
+          <div><span class="g" style="color:var(--ok)">✓</span> <span style="color:var(--ink3)">xKira banni du serveur</span></div>
+          <div><span style="color:var(--ink4)">$</span> <span style="color:var(--ink2)">time set day</span></div>
+          <div><span class="g" style="color:var(--ok)">✓</span> <span style="color:var(--ink3)" data-i18n="b2.line">Heure réglée · 12 joueurs notifiés</span></div>
+        </div>
+      </div>
+      <div class="cell c-big spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2 3 14h7l-1 8 11-13h-7l1-7z"/></svg></span>
+        <b>30<i>s</i></b>
+        <p style="margin-top:10px" data-i18n="b3.p">du tap « Héberger » à l'adresse publique partageable.</p>
+      </div>
+      <div class="cell c-vers spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3v12M6 15a3 3 0 1 0 3 3M6 15a9 9 0 0 0 9 3M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 0v3a6 6 0 0 1-3 5"/></svg></span>
+        <h3 data-i18n="b4.t">Multi-versions, vraiment</h3>
+        <p data-i18n="b4.p">Chaque version Java embarque son runtime dédié. Mondes isolés par version — la 1.8 ne corrompra jamais ta 1.21.</p>
+        <div class="vers-wall">
+          <span class="vc">Java 8</span><span class="vc">11</span><span class="vc">17</span><span class="vc">21</span><span class="vc">25</span>
+        </div>
+      </div>
+      <div class="cell c-bg spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+        <h3 data-i18n="b5.t">Vit en arrière-plan</h3>
+        <p data-i18n="b5.p">Service Android de premier plan : uptime, joueurs et bouton stop dans la notification. Écran éteint, serveur allumé.</p>
+      </div>
+      <div class="cell c-bg spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h4M7 13h7"/></svg></span>
+        <h3 data-i18n="b6.t">Addons & plugins officiels</h3>
+        <p data-i18n="b6.p">CurseForge pour Bedrock, Modrinth pour Java — via leurs API officielles, avec filtre de compatibilité par version.</p>
+      </div>
+      <div class="cell c-bg spot">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.2 2.2m8.4 8.4 2.2 2.2m0-12.8-2.2 2.2M7.8 16.2l-2.2 2.2"/><circle cx="12" cy="12" r="3.5"/></svg></span>
+        <h3 data-i18n="b7.t">Économie RAM</h3>
+        <p data-i18n="b7.p">Un preset qui borne distance de vue, tick et joueurs — activé automatiquement sur les appareils modestes.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════ PRICING ═══════════ -->
 <section id="pricing">
-  <div class="glow" style="width:560px;height:560px;background:rgba(232,150,63,.08);top:16%;right:-200px"></div>
   <div class="wrap">
     <div class="reveal" style="text-align:center">
-      <span class="eyebrow" data-i18n="price.eyebrow">Tarifs</span>
-      <h2 data-i18n="price.h2">Commence gratuitement</h2>
-      <p class="sec-sub" style="margin:0 auto" data-i18n="price.sub">Joue gratuitement avec des sessions de 2 h, ou passe Pro pour l'illimité.</p>
+      <span class="k" style="justify-content:center" data-i18n="pr.k">Tarifs</span>
+      <h2 data-i18n-html="pr.h2">Gratuit pour jouer.<br>Pro pour <span class="serif-i" style="color:var(--cu)">régner.</span></h2>
     </div>
-    <div class="price-grid">
-      <div class="plan reveal">
-        <h3 data-i18n="price.free">Gratuit</h3>
-        <div class="price">0 €<small data-i18n="price.forever"> / pour toujours</small></div>
+    <div class="plans reveal">
+      <div class="plan spot">
+        <div class="plan-top"><h3 data-i18n="pr.free">Découverte</h3></div>
+        <div class="pr"><b>0 €</b><span data-i18n="pr.forever">pour toujours</span></div>
+        <span class="pr-note" data-i18n="pr.freenote">Sans carte bancaire</span>
         <ul>
-          <li><span class="check">✓</span><span data-i18n="price.f1"><b>Tous les jeux</b> de la galerie</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.f2">Sessions de <b>2 h</b> (prolongeables avec des coins)</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.f3">Jusqu'à <b>4 joueurs</b> par serveur</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.f4">Adresse publique + console d'admin</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.f5">Coins gratuits : quêtes, pubs, <b>parrainage</b></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.f1"><b>Tous les jeux</b> de la galerie</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.f2">Sessions de <b>2 h</b>, prolongeables avec des coins</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.f3">Jusqu'à <b>4 joueurs</b> par serveur</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.f4">Adresse publique & console complète</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.f5">Coins gratuits : quêtes quotidiennes & <b>parrainage</b></span></li>
         </ul>
-        <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener" data-i18n="price.ctafree">Commencer gratuitement</a>
+        <a class="btn btn-line" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener" data-i18n="pr.ctafree">Commencer gratuitement</a>
       </div>
-      <div class="plan pro reveal">
-        <span class="plan-tag" data-i18n="price.popular">LE PLUS POPULAIRE</span>
-        <h3>Pro</h3>
-        <div class="price">4,99 €<small data-i18n="price.month"> / mois</small></div>
+      <div class="plan hot spot">
+        <div class="plan-top"><h3>Pro</h3><span class="plan-tag" data-i18n="pr.trial">ESSAI 3 JOURS</span></div>
+        <div class="pr"><b>4,99 €</b><span data-i18n="pr.month">par mois</span></div>
+        <span class="pr-note" data-i18n="pr.pronote">Annulable à tout moment, via Google Play</span>
         <ul>
-          <li><span class="check">✓</span><span data-i18n="price.p1">Hébergement <b>illimité</b>, sans sessions</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.p2">Jusqu'à <b>16 joueurs</b> par serveur</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.p3"><b>MOTD personnalisé</b> — ton serveur, ta marque</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.p4">Zéro publicité</span></li>
-          <li><span class="check">✓</span><span data-i18n="price.p5"><b>Essai gratuit 3 jours</b></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.p1">Hébergement <b>illimité</b> — plus de sessions</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.p2">Jusqu'à <b>16 joueurs</b> par serveur</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.p3"><b>MOTD personnalisé</b> — ton serveur, ta marque</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.p4"><b>Zéro publicité</b>, priorité sur les nouveautés</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5L20 7"/></svg><span data-i18n-html="pr.p5">Soutient le développement de la galerie</span></li>
         </ul>
-        <a class="btn btn-accent" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener" data-i18n="price.ctapro">Essayer Pro gratuitement</a>
+        <a class="btn btn-cu" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener" data-i18n="pr.ctapro">Essayer Pro gratuitement</a>
       </div>
     </div>
   </div>
@@ -466,179 +638,260 @@ footer{border-top:1px solid var(--line);padding:44px 0 40px;color:var(--faint);f
 <section id="faq">
   <div class="wrap">
     <div class="reveal" style="text-align:center">
-      <span class="eyebrow">FAQ</span>
-      <h2 data-i18n="faq.h2">Les questions qu'on nous pose</h2>
+      <span class="k" style="justify-content:center">FAQ</span>
+      <h2 data-i18n="faq.h2">Questions fréquentes</h2>
     </div>
     <div class="faq reveal">
-      <details class="qa"><summary data-i18n="faq.q1">Mon téléphone est-il assez puissant ?</summary><p data-i18n="faq.a1">Terraria tourne sur pratiquement tout. Minecraft Java demande ~3 Go de RAM, Bedrock ~6 Go. L'app détecte ton appareil et te préviens avant de lancer — et le mode Économie RAM réduit encore la charge.</p></details>
-      <details class="qa"><summary data-i18n="faq.q2">Mes amis doivent-ils installer l'app ?</summary><p data-i18n="faq.a2">Non ! Seul l'hôte a besoin de LightPocket. Tes amis rejoignent depuis leur jeu normal (PC, console, mobile) avec l'adresse que tu leur partages.</p></details>
-      <details class="qa"><summary data-i18n="faq.q3">Le serveur tourne-t-il écran éteint ?</summary><p data-i18n="faq.a3">Oui. Le serveur vit dans un service de premier plan Android avec une notification persistante : uptime, joueurs connectés et arrêt en un tap.</p></details>
-      <details class="qa"><summary data-i18n="faq.q4">C'est légal ? Et les mods ?</summary><p data-i18n="faq.a4">Oui. Nous utilisons les serveurs dédiés officiels et des catalogues communautaires légitimes (CurseForge, Modrinth) via leurs API officielles. Tu acceptes l'EULA Minecraft à la création d'un monde, comme sur PC.</p></details>
-      <details class="qa"><summary data-i18n="faq.q5">Ça consomme beaucoup de batterie / data ?</summary><p data-i18n="faq.a5">L'app affiche ta consommation réseau en direct. Pour une session entre amis, compte l'équivalent d'un streaming vidéo. Branche ton tel pour les longues sessions — l'app te guide.</p></details>
-      <details class="qa"><summary data-i18n="faq.q6">iOS ?</summary><p data-i18n="faq.a6">Android d'abord — c'est là que la magie technique est possible. iOS est sur notre radar, mais sans promesse de date.</p></details>
+      <details class="qa"><summary data-i18n="q1">Mon téléphone est-il assez puissant ?<span class="x"></span></summary><p data-i18n="a1">Terraria tourne sur pratiquement tout appareil 64 bits. Minecraft Java demande environ 3 Go de RAM, Bedrock 6 Go. L'app mesure ton appareil et te prévient avant de lancer — et le preset Économie RAM réduit encore la charge.</p></details>
+      <details class="qa"><summary data-i18n="q2">Mes amis doivent-ils installer l'app ?<span class="x"></span></summary><p data-i18n="a2">Non. Seul l'hôte a besoin de LightPocket. Tes amis rejoignent depuis leur jeu habituel — PC, console ou mobile selon le jeu — avec l'adresse que tu partages.</p></details>
+      <details class="qa"><summary data-i18n="q3">Le serveur tourne-t-il écran éteint ?<span class="x"></span></summary><p data-i18n="a3">Oui. Le serveur vit dans un service de premier plan Android, avec une notification persistante : uptime, joueurs connectés, arrêt en un tap. L'app te guide aussi pour exclure LightPocket de l'optimisation batterie.</p></details>
+      <details class="qa"><summary data-i18n="q4">Et côté légalité, mods compris ?<span class="x"></span></summary><p data-i18n="a4">Nous utilisons les serveurs dédiés officiels et les catalogues communautaires légitimes — CurseForge et Modrinth — via leurs API publiques. Tu acceptes l'EULA Minecraft à la création d'un monde, exactement comme sur PC. Le contenu payant du Marketplace reste protégé par son DRM : impossible de le pirater via l'app.</p></details>
+      <details class="qa"><summary data-i18n="q5">Batterie et data, ça donne quoi ?<span class="x"></span></summary><p data-i18n="a5">L'app affiche ta consommation réseau en temps réel. Une session entre amis équivaut grossièrement à du streaming vidéo. Pour les longues soirées : branche le téléphone, l'app s'occupe du reste.</p></details>
+      <details class="qa"><summary data-i18n="q6">Une version iOS ?<span class="x"></span></summary><p data-i18n="a6">Android d'abord — c'est la plateforme qui rend cette prouesse technique possible. iOS est sur le radar, sans date promise.</p></details>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ CTA FINAL ═══════════ -->
+<!-- ═══════════ FINAL ═══════════ -->
 <section class="final">
-  <div class="glow" style="width:700px;height:700px;background:rgba(232,150,63,.12);top:-100px;left:calc(50% - 350px)"></div>
-  <div class="wrap">
-    <span class="eyebrow" data-i18n="final.eyebrow">Prêt ?</span>
-    <h2 data-i18n-html="final.h2">Ton premier serveur t'attend.<br><span class="grad" style="background:linear-gradient(100deg,var(--accent-hi),#ff8e3c);-webkit-background-clip:text;background-clip:text;color:transparent">Il tient dans ta main.</span></h2>
-    <a class="btn btn-accent" style="font-size:16px;padding:16px 30px" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
-      <svg width="17" height="18" viewBox="0 0 24 24" fill="#16100a"><path d="M3 2.5v19l11-9.5L3 2.5zm13.5 7.3 3.8 2.2c1 .6 1 1.4 0 2l-3.8 2.2-3-3.2 3-3.2z"/></svg>
-      <span data-i18n="final.cta">Télécharger sur Google Play</span>
+  <div class="halo"></div>
+  <div class="wrap reveal">
+    <span class="k" style="justify-content:center" data-i18n="fin.k">Et maintenant</span>
+    <h2 data-i18n-html="fin.h2">Ton premier serveur tient<br>dans <span class="serif-i" style="color:var(--cu)">ta main.</span></h2>
+    <p class="sub" style="text-align:center;max-width:440px" data-i18n="fin.sub">Rejoins la bêta, lance un monde, envoie le lien. Le reste appartient à tes joueurs.</p>
+    <a class="btn btn-cu magnetic" href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">
+      <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3.2v17.6c0 .3.35.5.6.33L15 12 4.6 2.87a.38.38 0 0 0-.6.33zM16.4 10.6l2.9 1.68c.5.3.5.94 0 1.24l-2.9 1.68L13.6 12l2.8-1.4z"/></svg>
+      <span data-i18n="fin.cta">Télécharger sur Google Play</span>
     </a>
   </div>
 </section>
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer>
+  <div class="f-water">LIGHTPOCKET</div>
   <div class="wrap">
-    <div class="foot-grid">
-      <a class="brand" href="#" style="font-size:16px"><span class="bolt" style="width:28px;height:28px;border-radius:8px"><svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#16100a"/></svg></span>LightPocket</a>
-      <div class="foot-links">
-        <a href="https://nosxylw.github.io/lightpocket-legal/privacy.html" data-i18n="foot.privacy">Confidentialité</a>
-        <a href="https://nosxylw.github.io/lightpocket-legal/terms.html" data-i18n="foot.terms">Conditions</a>
-        <a href="https://nosxylw.github.io/lightpocket-legal/delete-account.html" data-i18n="foot.delete">Supprimer mon compte</a>
+    <div class="f-grid">
+      <div class="f-brand">
+        <a class="logo" href="#" style="font-size:16px">
+          <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z" fill="#140d05"/></svg></span>
+          LightPocket
+        </a>
+        <p data-i18n="f.tag">L'hébergeur de serveurs de jeux qui tient dans une poche. Conçu pour Android, propulsé par de vrais moteurs dédiés.</p>
+      </div>
+      <div class="f-col">
+        <h5 data-i18n="f.product">Produit</h5>
+        <a href="#games" data-i18n="f.games">La galerie de jeux</a>
+        <a href="#how" data-i18n="f.how">Fonctionnement</a>
+        <a href="#pricing" data-i18n="f.pricing">Tarifs</a>
+        <a href="https://play.google.com/store/apps/details?id=com.lightpocket" target="_blank" rel="noopener">Google Play</a>
+      </div>
+      <div class="f-col">
+        <h5 data-i18n="f.games2">Jeux</h5>
+        <a href="#games">Terraria</a>
+        <a href="#games">Minecraft Java</a>
+        <a href="#games">Minecraft Bedrock</a>
+        <a href="#games">tModLoader <span style="font-family:var(--mono);font-size:9px;color:var(--ink4)">SOON</span></a>
+      </div>
+      <div class="f-col">
+        <h5 data-i18n="f.legal">Légal</h5>
+        <a href="https://nosxylw.github.io/lightpocket-legal/privacy.html" data-i18n="f.privacy">Confidentialité</a>
+        <a href="https://nosxylw.github.io/lightpocket-legal/terms.html" data-i18n="f.terms">Conditions d'utilisation</a>
+        <a href="https://nosxylw.github.io/lightpocket-legal/delete-account.html" data-i18n="f.delete">Supprimer mon compte</a>
         <a href="mailto:gulain77@gmail.com">Contact</a>
       </div>
     </div>
-    <p class="disclaim" data-i18n="foot.disclaim">© 2026 LightPocket. LightPocket n'est pas affilié à Mojang Studios, Microsoft, Re-Logic ni ConcernedApe. « Minecraft » est une marque de Mojang Synergies AB ; « Terraria » est une marque de Re-Logic. Les contenus communautaires (addons, plugins) proviennent de CurseForge et Modrinth via leurs API officielles.</p>
+    <div class="f-bottom">
+      <span>© 2026 LightPocket</span>
+      <span data-i18n="f.disclaim">Non affilié à Mojang Studios, Microsoft, Re-Logic ou ConcernedApe.</span>
+    </div>
   </div>
 </footer>
 
 <script>
-/* ═══ Reveal au scroll ═══ */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+/* ═══ reveals ═══ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-/* stagger des grilles */
-document.querySelectorAll('.games-grid,.steps,.feat-grid,.price-grid').forEach(g=>{[...g.children].forEach((c,i)=>c.style.transitionDelay=(i*90)+'ms')});
 
-/* ═══ Marquee : dupliquer le contenu pour boucler ═══ */
-const mq=document.getElementById('marquee');mq.innerHTML+=mq.innerHTML;
+/* ═══ compteurs (proof) ═══ */
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;cio.unobserve(e.target);
+  const el=e.target,end=+el.dataset.count,t0=performance.now();
+  (function f(t){const p=Math.min((t-t0)/1400,1),v=Math.round(end*(1-Math.pow(1-p,3)));
+   el.textContent=v.toLocaleString('fr-FR');if(p<1)requestAnimationFrame(f)})(t0);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
 
-/* ═══ Console live du téléphone (3 scènes qui tournent) ═══ */
+/* ═══ ticker loop ═══ */
+const tk=document.getElementById('ticker');tk.innerHTML+=tk.innerHTML;
+
+/* ═══ stage : parallaxe souris ═══ */
+const stage=document.getElementById('stage');
+if(stage&&matchMedia('(pointer:fine)').matches){
+  stage.addEventListener('mousemove',e=>{
+    const r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    stage.querySelectorAll('.card3').forEach(c=>{
+      const d=+c.dataset.depth||10;
+      c.style.transform=`translate(${x*d}px,${y*d}px) rotateY(${x*3}deg) rotateX(${-y*3}deg)`});
+  });
+  stage.addEventListener('mouseleave',()=>stage.querySelectorAll('.card3').forEach(c=>c.style.transform=''));
+}
+
+/* ═══ console du dashboard : scènes ═══ */
 const SCENES=[
- {game:'Minecraft Java',addr:'play.lightpocket.gg:7794',players:'2/10',lines:[
-  ['t','[19:42:01] '],['srv','Starting Paper 1.20.1 (Java 17)…'],
-  ['t','[19:42:09] '],['srv','Preparing spawn area: 84%'],
-  ['t','[19:42:12] '],['ok','Done (11.2s)! For help, type "help"'],
-  ['t','[19:42:31] '],['net','Tunnel établi · play.lightpocket.gg:7794'],
-  ['t','[19:43:05] '],['ok','Mohamed_91 joined the game'],
-  ['t','[19:44:48] '],['ok','xKira joined the game'],
-  ['t','[19:45:02] '],['srv','<Mohamed_91> on fait une base ?']]},
- {game:'Terraria',addr:'play.lightpocket.gg:7801',players:'3/8',lines:[
-  ['t','[20:11:15] '],['srv','TShock 6.1 · Terraria 1.4.5'],
-  ['t','[20:11:20] '],['srv','Generating jungle…'],
-  ['t','[20:11:36] '],['ok','Server started — listening on 7777'],
-  ['t','[20:11:37] '],['net','Relais connecté · eu-west'],
-  ['t','[20:12:12] '],['ok','Nova (10.2.0.4) has joined.'],
-  ['t','[20:13:44] '],['warn','Boss « Eye of Cthulhu » invoqué !']]},
- {game:'Minecraft Bedrock',addr:'play.lightpocket.gg:7788',players:'4/10',lines:[
-  ['t','[21:02:44] '],['srv','Bedrock Dedicated Server 26.32'],
-  ['t','[21:02:58] '],['ok','Server started.'],
-  ['t','[21:03:01] '],['net','Tunnel UDP · play.lightpocket.gg:7788'],
-  ['t','[21:03:29] '],['ok','Player connected: Leo_craft'],
-  ['t','[21:04:10] '],['srv','Addon actif : More Body Actions'],
-  ['t','[21:05:02] '],['ok','Player connected: Miss_Luna']]}];
-const consoleEl=document.getElementById('console');
-let scene=0;
+ {g:'Minecraft Java · 1.20.1',a:'play.lightpocket.gg:7794',l:[
+  ['p','[19:42:01] '],['n','Starting Paper 1.20.1 (Java 17)…'],
+  ['p','[19:42:09] '],['n','Preparing spawn area: 84%'],
+  ['p','[19:42:12] '],['g','Done (11.2s)! For help, type "help"'],
+  ['p','[19:42:31] '],['b','Tunnel actif · play.lightpocket.gg:7794'],
+  ['p','[19:43:05] '],['g','Mohamed_91 joined the game'],
+  ['p','[19:45:02] '],['n','<Mohamed_91> on fait une base ?']]},
+ {g:'Terraria · 1.4.5',a:'play.lightpocket.gg:7801',l:[
+  ['p','[20:11:15] '],['n','TShock 6.1 · Terraria 1.4.5'],
+  ['p','[20:11:20] '],['n','Generating dungeon…'],
+  ['p','[20:11:36] '],['g','Server started — listening on 7777'],
+  ['p','[20:12:12] '],['g','Nova_77 has joined.'],
+  ['p','[20:13:44] '],['w','Boss « Eye of Cthulhu » invoqué']]},
+ {g:'Minecraft Bedrock · 26.32',a:'play.lightpocket.gg:7788',l:[
+  ['p','[21:02:44] '],['n','Bedrock Dedicated Server 26.32'],
+  ['p','[21:02:58] '],['g','Server started.'],
+  ['p','[21:03:01] '],['b','Tunnel UDP · play.lightpocket.gg:7788'],
+  ['p','[21:03:29] '],['g','Player connected: Leo_craft'],
+  ['p','[21:04:10] '],['n','Addon actif : More Body Actions']]}];
+const term=document.getElementById('term');let sc=0;
 function playScene(){
-  const s=SCENES[scene%SCENES.length];
-  document.getElementById('phoneGame').textContent=s.game;
-  document.getElementById('phoneAddr').textContent=s.addr;
-  document.getElementById('mPlayers').textContent=s.players;
-  consoleEl.innerHTML='';
-  let li=0;
-  function nextLine(){
-    if(li>=s.lines.length/1){/* fin de scène → toast puis scène suivante */
-      setTimeout(()=>{scene++;playScene()},5200);return}
-    const row=document.createElement('div');row.className='cl';consoleEl.appendChild(row);
-    /* chaque "ligne" logique = paire [timestamp, message] */
-    const t=s.lines[li],m=s.lines[li+1];li+=2;
-    row.innerHTML=`<span class="${t[0]}">${t[1]}</span>`;
-    const span=document.createElement('span');span.className=m[0];row.appendChild(span);
-    const cur=document.createElement('span');cur.className='cursor';row.appendChild(cur);
+  const s=SCENES[sc++%SCENES.length];
+  document.getElementById('dashGame').textContent=s.g;
+  document.getElementById('dashAddr').textContent=s.a;
+  term.innerHTML='';let li=0;
+  (function nextLine(){
+    if(li>=s.l.length){setTimeout(playScene,5400);return}
+    const row=document.createElement('div');term.appendChild(row);
+    const t=s.l[li],m=s.l[li+1];li+=2;
+    row.innerHTML=`<span class="p">${t[1]}</span>`;
+    const sp=document.createElement('span');sp.className=m[0];row.appendChild(sp);
+    const cu=document.createElement('span');cu.className='caret';row.appendChild(cu);
     let ci=0;
     (function type(){
-      if(ci<=m[1].length){span.textContent=m[1].slice(0,ci++);setTimeout(type,14+Math.random()*22)}
-      else{cur.remove();
-        if(consoleEl.children.length>9)consoleEl.removeChild(consoleEl.firstChild);
-        setTimeout(nextLine,420+Math.random()*500)}
+      if(ci<=m[1].length){sp.textContent=m[1].slice(0,ci++);setTimeout(type,13+Math.random()*20)}
+      else{cu.remove();if(term.children.length>6)term.removeChild(term.firstChild);
+        setTimeout(nextLine,430+Math.random()*480)}
     })();
-  }
-  nextLine();
+  })();
 }
 playScene();
-
-/* toasts joueurs */
-function cycleToasts(){
-  const t1=document.getElementById('toast1'),t2=document.getElementById('toast2');
-  setTimeout(()=>t1.classList.add('show'),4000);
-  setTimeout(()=>t1.classList.remove('show'),9000);
-  setTimeout(()=>t2.classList.add('show'),12000);
-  setTimeout(()=>t2.classList.remove('show'),17000);
-  setTimeout(cycleToasts,24000);
-}
-cycleToasts();
-
-/* uptime qui défile */
+/* uptime */
 let up=2*3600+41*60+7;
-setInterval(()=>{up++;const h=String(Math.floor(up/3600)).padStart(2,'0'),m=String(Math.floor(up%3600/60)).padStart(2,'0'),s=String(up%60).padStart(2,'0');
+setInterval(()=>{up++;const h=String(up/3600|0).padStart(2,'0'),m=String(up%3600/60|0).padStart(2,'0'),s=String(up%60).padStart(2,'0');
 document.getElementById('mUp').textContent=`${h}:${m}:${s}`},1000);
 
-/* ═══ FR / EN ═══ */
+/* ═══ games showcase ═══ */
+const SCENE_CLASSES=['sc-terraria','sc-java','sc-bedrock','sc-tmod','sc-stardew'];
+const gscene=document.getElementById('gscene');
+const gtabs=[...document.querySelectorAll('.gtab')];
+const gpanes=[...document.querySelectorAll('.gpane-content')];
+gscene.classList.add(SCENE_CLASSES[0]);
+let gAuto=setInterval(()=>selectGame((gtabs.findIndex(t=>t.classList.contains('on'))+1)%5,false),6000);
+function selectGame(i,user){
+  if(user){clearInterval(gAuto);gAuto=null}
+  gtabs.forEach((t,j)=>t.classList.toggle('on',j===i));
+  gpanes.forEach((p,j)=>p.classList.toggle('on',j===i));
+  gscene.className='gscene '+SCENE_CLASSES[i];
+}
+gtabs.forEach((t,i)=>t.addEventListener('click',()=>selectGame(i,true)));
+/* parallaxe légère des couches de scène au scroll */
+addEventListener('scroll',()=>{
+  const r=gscene.getBoundingClientRect();
+  if(r.bottom<0||r.top>innerHeight)return;
+  const p=(innerHeight-r.top)/(innerHeight+r.height)-.5;
+  gscene.querySelectorAll('[data-px]').forEach(l=>l.style.transform=`translateY(${p*+l.dataset.px}px)`);
+},{passive:true});
+
+/* ═══ how : steps qui s'allument au scroll ═══ */
+const steps=[...document.querySelectorAll('.hstep')];
+const sio=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('lit',e.isIntersecting)),
+  {rootMargin:'-38% 0px -38% 0px'});
+steps.forEach(s=>sio.observe(s));
+
+/* ═══ spotlight borders ═══ */
+document.querySelectorAll('.spot').forEach(el=>{
+  el.addEventListener('mousemove',e=>{
+    const r=el.getBoundingClientRect();
+    el.style.setProperty('--mx',(e.clientX-r.left)+'px');
+    el.style.setProperty('--my',(e.clientY-r.top)+'px');
+  });
+});
+
+/* ═══ boutons magnétiques ═══ */
+if(matchMedia('(pointer:fine)').matches){
+  document.querySelectorAll('.magnetic').forEach(b=>{
+    b.addEventListener('mousemove',e=>{
+      const r=b.getBoundingClientRect();
+      b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.3}px)`});
+    b.addEventListener('mouseleave',()=>b.style.transform='');
+  });
+}
+
+/* ═══ FR/EN ═══ */
 const EN={
- 'nav.games':'Games','nav.how':'How it works','nav.features':'Features','nav.pricing':'Pricing','nav.get':'Download',
- 'hero.pill':'OPEN BETA · ANDROID','hero.h1':'Your game servers.<br><span class="grad">In your pocket.</span>',
- 'hero.sub':'Host Terraria and Minecraft servers — Bedrock and Java — straight from your phone. No PC. No rentals. Friends join in 30 seconds with a simple link.',
- 'hero.cta1':'Get it on Google Play','hero.cta2':'See the games ↓','hero.s1':'hostable games','hero.s2':'to get online','hero.s3':'to get started',
- 'toast.joined':'just joined','toast.joined2':'just joined','phone.online':'ONLINE','phone.players':'Players',
- 'games.eyebrow':'The gallery','games.h2':'One phone.<br>All your servers.','games.sub':'Every game runs on a real dedicated server engine, optimized for ARM. Pick one, create a world, host — and the gallery keeps growing.',
- 'g.live':'AVAILABLE','g.soon':'SOON','g.soon2':'SOON','g.indev':'In development','g.roadmap':'On the roadmap',
- 'g.terraria':'The cult 2D sandbox, powered by TShock. Small to large worlds, Classic to Master difficulty, full admin commands from your pocket.',
- 'g.java':'Native ARM Paper — no emulation. Pick YOUR version: 1.8.8 for PvP, the legendary 1.20.1, or the very latest. Built-in Modrinth plugins with verified compatibility.',
- 'g.bedrock':'The real Mojang dedicated server. CurseForge addons, maps and texture packs in two taps.',
- 'g.tmod':'Modded Terraria — Calamity, Thorium and thousands of mods, hosted from your phone.',
- 'g.stardew':'Your co-op farm, reachable by friends even while your PC sleeps.',
- 'how.eyebrow':'Genuinely simple','how.h2':'Online in three moves',
- 'how.1t':'Pick your game','how.1p':'Terraria, Minecraft Bedrock or Java. Each engine downloads on demand, verified and optimized for your device.',
- 'how.2t':'Create your world','how.2p':'A guided 2-minute wizard, or expert mode with every server.properties setting. Even import your existing maps.',
- 'how.3t':'Share your link','how.3p':'Tap Host: your server gets a public address. Friends paste it in their game — that\'s it.',
- 'feat.eyebrow':'Under the hood','feat.h2':'Built like a real host','feat.sub':'Not a gimmick: real server engines, a global relay, and the admin tools you\'d expect from serious hosting.',
- 'f.1t':'Instant public address','f.1p':'Our relay gives your server an address reachable worldwide — no router setup, no port forwarding.',
- 'f.2t':'Built-in addons & plugins','f.2p':'CurseForge for Bedrock, Modrinth for Java. Search, per-version compatibility checks, two-tap installs.',
- 'f.3t':'Full admin console','f.3p':'Live logs, quick commands, kick/ban, real-time player list — total control from your phone screen.',
- 'f.4t':'Smart RAM saver','f.4p':'A preset that caps view distance, ticks and players so a server can run even on a modest phone.',
- 'f.5t':'True multi-version','f.5p':'Java from 1.8.8 to 26.x, each version with its own runtime and isolated worlds. Your 1.8 world can never be corrupted.',
- 'f.6t':'Lives in the background','f.6p':'Screen off, server on. A persistent notification shows uptime, players and a stop button — like a real daemon.',
- 'price.eyebrow':'Pricing','price.h2':'Start for free','price.sub':'Play free with 2-hour sessions, or go Pro for unlimited.',
- 'price.free':'Free','price.forever':' / forever','price.month':' / month','price.popular':'MOST POPULAR',
- 'price.f1':'<b>Every game</b> in the gallery','price.f2':'<b>2-hour</b> sessions (extend with coins)','price.f3':'Up to <b>4 players</b> per server','price.f4':'Public address + admin console','price.f5':'Free coins: quests, ads, <b>referrals</b>',
- 'price.p1':'<b>Unlimited</b> hosting, no sessions','price.p2':'Up to <b>16 players</b> per server','price.p3':'<b>Custom MOTD</b> — your server, your brand','price.p4':'Zero ads','price.p5':'<b>3-day free trial</b>',
- 'price.ctafree':'Start for free','price.ctapro':'Try Pro for free',
- 'faq.h2':'Questions we get asked',
- 'faq.q1':'Is my phone powerful enough?','faq.a1':'Terraria runs on almost anything. Minecraft Java needs ~3 GB RAM, Bedrock ~6 GB. The app detects your device and warns you before launching — and RAM saver mode reduces the load further.',
- 'faq.q2':'Do my friends need the app?','faq.a2':'No! Only the host needs LightPocket. Friends join from their normal game (PC, console, mobile) using the address you share.',
- 'faq.q3':'Does it run with the screen off?','faq.a3':'Yes. The server lives in an Android foreground service with a persistent notification: uptime, connected players and one-tap stop.',
- 'faq.q4':'Is it legal? What about mods?','faq.a4':'Yes. We use the official dedicated servers and legitimate community catalogs (CurseForge, Modrinth) through their official APIs. You accept the Minecraft EULA when creating a world, just like on PC.',
- 'faq.q5':'Battery / data hungry?','faq.a5':'The app shows your live network usage. A session with friends is roughly comparable to video streaming. Plug in for long sessions — the app guides you.',
- 'faq.q6':'iOS?','faq.a6':'Android first — that\'s where the technical magic is possible. iOS is on our radar, no date promised.',
- 'final.eyebrow':'Ready?','final.h2':'Your first server is waiting.<br><span class="grad" style="background:linear-gradient(100deg,var(--accent-hi),#ff8e3c);-webkit-background-clip:text;background-clip:text;color:transparent">It fits in your hand.</span>',
- 'final.cta':'Get it on Google Play',
- 'foot.privacy':'Privacy','foot.terms':'Terms','foot.delete':'Delete my account',
- 'foot.disclaim':'© 2026 LightPocket. LightPocket is not affiliated with Mojang Studios, Microsoft, Re-Logic or ConcernedApe. "Minecraft" is a trademark of Mojang Synergies AB; "Terraria" is a trademark of Re-Logic. Community content (addons, plugins) comes from CurseForge and Modrinth via their official APIs.'};
-let FR={};let lang='fr';
+ 'nav.games':'Games','nav.how':'How it works','nav.features':'Capabilities','nav.pricing':'Pricing','nav.get':'Download',
+ 'hero.badge':'Closed beta live — 88 active testers',
+ 'hero.h1':'The server is<br>your <em>phone.</em>',
+ 'hero.sub':'<b>Terraria</b> and <b>Minecraft</b> servers — Bedrock and Java — running on real dedicated engines, from Android. Public address in 30 seconds. No PC, no rentals.',
+ 'hero.cta1':'Join the beta','hero.cta2':'Explore the games',
+ 'p.testers':'beta testers','p.servers':'servers launched in beta','p.plugins':'compatible Java plugins',
+ 'stage.players':'Players','stage.j1':'online · 42 min','stage.j2':'online · 18 min','stage.j3':'online · 3 min',
+ 'stage.notif':'xKira joined "Leo\'s World"','stage.chip':'screen off · server running',
+ 'man.k':'Why LightPocket','man.p':'Renting a server costs <b>€5 a month</b>. Leaving a PC on all night, even more. Yet the phone in your pocket is <em>already</em> an eight-core ARM computer. <b>We just turned it into a dedicated game machine.</b>',
+ 'games.k':'The gallery','games.h2':'Pick your game.<br>We bring <span class="serif-i" style="color:var(--cu)">the engine.</span>',
+ 'g.soon':'SOON','g.soon2':'SOON',
+ 'gd.terraria':'The most battle-tested engine in the app. Full world generation (jungle, dungeon, sky islands), Classic to Master difficulty, live kick/ban and admin commands from the console.',
+ 'gd.java':'Zero emulation: the JVM runs natively. Pick your version — 1.8.8 for PvP, the legendary 1.20.1, or the very latest — each with its own dedicated Java runtime and isolated worlds. Modrinth plugins with per-version compatibility checks.',
+ 'gd.bedrock':'Mojang\'s official dedicated server, translated x86 → ARM on the fly. CurseForge addons, maps and texture packs, local .mcworld import, and a RAM-saver mode for modest devices.',
+ 'gd.tmod':'Modded Terraria — Calamity, Thorium, Fargo\'s… The engine reuses our proven .NET stack from Terraria, no emulation. It\'s the next game in the gallery.',
+ 'gd.stardew':'Your co-op farm, reachable by friends even with your PC off. Stardew multiplayer has no official dedicated server — we\'re building the right approach, not a fragile one.',
+ 'gs.boot':'boot time','gs.players':'max players','gs.est':'est. RAM','gs.eta':'arriving','gs.eta2':'no date','gs.coop':'co-op players','gs.envisioned':'planned',
+ 'gv.tshock':'TShock plugins','gv.import':'.wld import','gv.mcworld':'.mcworld import','gv.indev':'in development','gv.roadmap':'on the roadmap',
+ 'ge.tmod':'in development · shared .NET engine','ge.stardew':'under study · roadmap',
+ 'how.k':'How it works','how.h2':'Online before you finish <span class="serif-i" style="color:var(--cu)">this sentence.</span>',
+ 'how.sub':'No VPS to configure, no router ports to open, no config files. The app does a sysadmin\'s job — you just play.','how.cta':'Try it now',
+ 'how.1t':'Pick the game, create the world','how.1p':'A two-minute guided wizard, or expert mode with every server.properties key. Game engines download on demand — SHA-256 verified, from official sources.',
+ 'how.2t':'Tap Host','how.2p':'The server boots inside an isolated Linux environment on your phone. Our relay instantly assigns it a public address — your router stays untouched, your IP stays private.',
+ 'how.3t':'Send the address','how.3p':'Friends paste it into their game — PC, console or mobile depending on the game. You watch live connections, console and metrics. Screen off, everything keeps running.',
+ 'bento.k':'Capabilities','bento.h2':'A real host.<br>Pocket <span class="serif-i" style="color:var(--cu)">sized.</span>',
+ 'b1.t':'Built-in global relay','b1.p':'Every server gets a dedicated public port on our relay. Zero network setup, zero exposure of your personal IP — the tunnel is encrypted from your phone to the relay.',
+ 'b2.t':'A real admin console','b2.line':'Time set · 12 players notified',
+ 'b3.p':'from tapping "Host" to a shareable public address.',
+ 'b4.t':'Truly multi-version','b4.p':'Each Java version ships its own runtime. Worlds isolated per version — 1.8 can never corrupt your 1.21.',
+ 'b5.t':'Lives in the background','b5.p':'Android foreground service: uptime, players and a stop button right in the notification. Screen off, server on.',
+ 'b6.t':'Official addons & plugins','b6.p':'CurseForge for Bedrock, Modrinth for Java — through their official APIs, with per-version compatibility filtering.',
+ 'b7.t':'RAM saver','b7.p':'A preset that caps view distance, ticks and players — enabled automatically on modest devices.',
+ 'pr.k':'Pricing','pr.h2':'Free to play.<br>Pro to <span class="serif-i" style="color:var(--cu)">reign.</span>',
+ 'pr.free':'Starter','pr.forever':'forever','pr.freenote':'No credit card','pr.month':'per month','pr.pronote':'Cancel anytime, via Google Play','pr.trial':'3-DAY TRIAL',
+ 'pr.f1':'<b>Every game</b> in the gallery','pr.f2':'<b>2-hour</b> sessions, extendable with coins','pr.f3':'Up to <b>4 players</b> per server','pr.f4':'Public address & full console','pr.f5':'Free coins: daily quests & <b>referrals</b>',
+ 'pr.p1':'<b>Unlimited</b> hosting — no sessions','pr.p2':'Up to <b>16 players</b> per server','pr.p3':'<b>Custom MOTD</b> — your server, your brand','pr.p4':'<b>Zero ads</b>, early access to new games','pr.p5':'Supports the gallery\'s development',
+ 'pr.ctafree':'Start for free','pr.ctapro':'Try Pro for free',
+ 'faq.h2':'Frequently asked',
+ 'q1':'Is my phone powerful enough?','a1':'Terraria runs on virtually any 64-bit device. Minecraft Java needs about 3 GB of RAM, Bedrock 6 GB. The app measures your device and warns you before launching — and the RAM-saver preset lowers the load further.',
+ 'q2':'Do my friends need the app?','a2':'No. Only the host needs LightPocket. Friends join from their usual game — PC, console or mobile depending on the title — using the address you share.',
+ 'q3':'Does it run with the screen off?','a3':'Yes. The server lives in an Android foreground service with a persistent notification: uptime, connected players, one-tap stop. The app also guides you to exempt LightPocket from battery optimization.',
+ 'q4':'What about legality, mods included?','a4':'We use the official dedicated servers and legitimate community catalogs — CurseForge and Modrinth — through their public APIs. You accept the Minecraft EULA when creating a world, exactly like on PC. Paid Marketplace content stays protected by its DRM: it can\'t be pirated through the app.',
+ 'q5':'Battery and data usage?','a5':'The app shows your live network usage. A session with friends is roughly comparable to video streaming. For long evenings: plug the phone in, the app handles the rest.',
+ 'q6':'An iOS version?','a6':'Android first — it\'s the platform that makes this technical feat possible. iOS is on the radar, no promised date.',
+ 'fin.k':'What now','fin.h2':'Your first server fits<br>in <span class="serif-i" style="color:var(--cu)">your hand.</span>',
+ 'fin.sub':'Join the beta, launch a world, send the link. The rest belongs to your players.','fin.cta':'Get it on Google Play',
+ 'f.tag':'The game-server host that fits in a pocket. Built for Android, powered by real dedicated engines.',
+ 'f.product':'Product','f.games':'The game gallery','f.how':'How it works','f.pricing':'Pricing','f.games2':'Games','f.legal':'Legal',
+ 'f.privacy':'Privacy','f.terms':'Terms of use','f.delete':'Delete my account',
+ 'f.disclaim':'Not affiliated with Mojang Studios, Microsoft, Re-Logic or ConcernedApe.'};
+let FR={},lang='fr';
 document.querySelectorAll('[data-i18n]').forEach(el=>FR[el.dataset.i18n]=el.innerHTML);
 document.querySelectorAll('[data-i18n-html]').forEach(el=>FR[el.dataset.i18nHtml]=el.innerHTML);
 function toggleLang(){
   lang=lang==='fr'?'en':'fr';
-  const dict=lang==='en'?EN:FR;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=dict[el.dataset.i18n];if(v!=null)el.innerHTML=v});
-  document.querySelectorAll('[data-i18n-html]').forEach(el=>{const v=dict[el.dataset.i18nHtml];if(v!=null)el.innerHTML=v});
-  document.getElementById('langBtn').textContent=lang==='fr'?'EN':'FR';
+  const d=lang==='en'?EN:FR;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const v=d[el.dataset.i18n];if(v!=null)el.innerHTML=v});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{const v=d[el.dataset.i18nHtml];if(v!=null)el.innerHTML=v});
+  document.getElementById('langBtn').innerHTML=lang==='fr'?'<b>FR</b> / EN':'FR / <b>EN</b>';
   document.documentElement.lang=lang;
 }
 </script>
